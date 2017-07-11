@@ -3,11 +3,9 @@ package com.heaven7.android.util2;
 import android.media.MediaPlayer;
 import android.text.TextUtils;
 
-import com.classroom100.android.cache.QuestionCacheHelper;
 import com.heaven7.core.util.Logger;
 import com.heaven7.java.base.util.Throwables;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -30,14 +28,12 @@ public class MediaHelper {
     public MediaHelper(MediaCallback callback){
         Throwables.checkNull(callback);
         this.mCallback = callback;
-        mPlayer = new MediaPlayer();
-        mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                Logger.e(TAG, "showNormalUi", "what = " + what + " , extra = " + extra);
-                return false;
-            }
-        });
+        this.mPlayer = new MediaPlayer();
+        mPlayer.setOnErrorListener(mCallback);
+    }
+
+    public MediaPlayer getMediaPlayer(){
+        return mPlayer;
     }
 
     /**
@@ -63,7 +59,7 @@ public class MediaHelper {
                 break;
 
             case STATE_NOT_START:
-                startPlayDownloadFile(url);
+                startPlay(url);
                 break;
 
             default:
@@ -71,26 +67,38 @@ public class MediaHelper {
         }
     }
 
-    public void stopPlay() {
+    /**
+     * stop the media.
+     */
+    public void stop() {
         if(mPlayer != null && mPlayer.isPlaying()) {
             Logger.d(TAG, "stopPlay", "");
             mPlayer.stop();
             setStateInternal(STATE_NOT_START);
         }
     }
-
-    public void pausePlay() {
+    /**
+     * pause the media.
+     */
+    public void pause() {
         if(mPlayer != null && mPlayer.isPlaying()) {
             mPlayer.pause();
             setStateInternal(STATE_PAUSED);
         }
     }
+    /**
+     * resume play the media.
+     */
     public void resumePlay() {
         if(mPlayer != null && mState == STATE_PAUSED) {
             setStateInternal(STATE_PLAYING);
             mPlayer.start();
         }
     }
+
+    /**
+     * called on destroy the media.
+     */
     public void onDestroy() {
         if(mPlayer != null) {
             if (mPlayer.isPlaying()) {
@@ -103,22 +111,44 @@ public class MediaHelper {
         }
     }
 
-    public void startPlayDownloadFile(String url) {
-        startPlayDownloadFile(url, 0);
+    public void startPlay(String url) {
+        startPlay(url, 0);
     }
 
-    public void startPlayDownloadFile(String url , int position) {
-        File file = QuestionCacheHelper.getInstance().getAudio(url);
-        if(file == null){
-            Logger.w(TAG,"startPlayDownloadFile","file = null");
+    /**
+     * start play the url for target position.
+     * @param url the url.
+     * @param position the position.
+     */
+    public void startPlay(String url , int position) {
+        String localFile = getLocalFile(url);
+        if(localFile == null){
+            Logger.w(TAG,"startPlayDownloadFile","local url/file = null");
             return;
         }
-        Logger.i(TAG,"startPlayDownloadFile","file = " + file);
-        startPlayFile(file.getAbsolutePath(), position);
+        Logger.d(TAG,"startPlayDownloadFile","local url/file = " + localFile);
+        startPlayFile(localFile, position);
     }
 
+    /**
+     * get the current position of media player.
+     * @return the position. or -1 if is destroyed.
+     */
+    public int getCurrentPosition(){
+        return mPlayer != null ? mPlayer.getCurrentPosition() : -1;
+    }
+
+    /**
+     * get the local file for target url. often we download the url audio/video then play it.
+     * @param url the url
+     * @return the local file (absolute path)
+     */
+    protected String getLocalFile(String url){
+        return url;
+    }
+    //====================================================
     private boolean startPlayFile(final String filename, final int position){
-        Logger.d(TAG,"startPlayFile","filename = " + filename);
+        Logger.d(TAG,"startPlayFile","filename/url = " + filename);
         if(!TextUtils.isEmpty(filename) && mPlayer != null){
             try {
                 mPlayer.reset();
@@ -127,7 +157,9 @@ public class MediaHelper {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
                         MediaHelper.this.onPrepared(mp, position);
-                        onPrepareFileComplete(filename);
+                        if(mCallback != null){
+                            mCallback.onPrepareComplete(mp, filename);
+                        }
                     }
                 });
                 mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -140,15 +172,13 @@ public class MediaHelper {
                 mPlayer.prepareAsync();
                 return true;
             } catch (IOException e) {
-                resetPlayer();
+                if(mPlayer != null) {
+                    mPlayer.reset();
+                }
                 e.printStackTrace();
             }
         }
         return false;
-    }
-
-    public int getPlayPosition(){
-        return mPlayer != null ? mPlayer.getCurrentPosition() : 0;
     }
 
     private void setStateInternal(byte newState){
@@ -171,28 +201,42 @@ public class MediaHelper {
     private void onPlayFileComplete(String filename) {
         setStateInternal(STATE_NOT_START); //done to unstart
         if(mCallback != null){
-            mCallback.onPlayFileComplete(filename);
+            mCallback.onPlayComplete(mPlayer, filename);
         }
     }
 
-    private void onPrepareFileComplete(String filename) {
-        if(mCallback != null){
-            mCallback.onPrepareFileComplete(filename);
+    /**
+     * the media callback of control {@linkplain MediaPlayer}.
+     */
+    public static abstract class MediaCallback implements MediaPlayer.OnErrorListener{
+
+        /**
+         * called on play complete.
+         * @param mp the media player
+         * @param filename the filename or url.
+         */
+        public abstract void onPlayComplete(MediaPlayer mp, String filename);
+
+        /**
+         * called on media state changed.
+         * @param mp the media player.
+         * @param state the state. see {@linkplain #STATE_BUFFERING} and etc.
+         */
+        public abstract void onMediaStateChanged(MediaPlayer mp, byte state);
+
+        /**
+         * called on prepare complete.
+         *  @param mp the media player
+         * @param filename the filename or url.
+         */
+        public void onPrepareComplete(MediaPlayer mp, String filename){
+
         }
-    }
 
-    private void resetPlayer(){
-        if(mPlayer != null) {
-            mPlayer.reset();
+        @Override
+        public boolean onError(MediaPlayer mp, int what, int extra) {
+            Logger.e(TAG, "showNormalUi", "what = " + what + " , extra = " + extra);
+            return false;
         }
-    }
-
-    public interface MediaCallback{
-
-        void onPlayFileComplete(String filename);
-
-        void onPrepareFileComplete(String filename);
-
-        void onMediaStateChanged(MediaPlayer mp, byte state);
     }
 }

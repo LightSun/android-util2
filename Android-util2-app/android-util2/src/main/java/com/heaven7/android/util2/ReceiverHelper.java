@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import com.heaven7.java.base.util.Throwables;
+
 /**
  * the common receiver callback.
  * Created by heaven7 on 2017/7/5 0005.
@@ -28,6 +30,7 @@ public class ReceiverHelper {
     }
 
     public void register(){
+        Throwables.checkNull(mCallback);
         if(mReceiver != null) {
             mReceiver = new InternalReceiver();
             mContext.registerReceiver(mReceiver, mCallback.buildIntentFilter(mContext));

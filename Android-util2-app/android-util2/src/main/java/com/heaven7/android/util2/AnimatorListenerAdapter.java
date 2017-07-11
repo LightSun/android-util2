@@ -2,6 +2,10 @@ package com.heaven7.android.util2;
 
 import android.animation.Animator;
 
+/**
+ * the animator listener adapter.
+ * @author heaven7
+ */
 public abstract class AnimatorListenerAdapter implements Animator.AnimatorListener {
 
     @Override

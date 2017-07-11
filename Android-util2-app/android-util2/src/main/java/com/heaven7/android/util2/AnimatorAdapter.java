@@ -12,7 +12,7 @@ import com.heaven7.adapter.AdapterManager;
 import java.util.List;
 
 /**
- * the animator adapter
+ * the animator adapter which can wrap a common adapter of {@linkplain RecyclerView}.
  *
  * @author heaven7
  */
@@ -31,7 +31,7 @@ public abstract class AnimatorAdapter extends RecyclerView.Adapter<RecyclerView.
     /**
      * the anim count
      */
-    private int mAnimCount = 2;
+    private int mAnimCount = 1;
     /**
      * if animate every time (eg: whenever adapter crud.)
      */
@@ -41,15 +41,21 @@ public abstract class AnimatorAdapter extends RecyclerView.Adapter<RecyclerView.
      */
     private int[] mAnimPositions;
     /**
-     * cancel the animate or not
+     * cancel the next animate or not. in next notify change.
      */
-    private boolean mCanceled;
+    private boolean mNotifyCanceled = true;
+
+    /**
+     * cancel the current animator or not.
+     */
+    private boolean mCancelAnim;
     /**
      * the animate callback.
      */
     private AnimateCallback mCallback;
 
-    private long mSartDelay = 300;
+    private long mStartDelay = 300;
+
 
     public AnimatorAdapter(RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
         mAdapter = adapter;
@@ -84,7 +90,7 @@ public abstract class AnimatorAdapter extends RecyclerView.Adapter<RecyclerView.
 
         //every item have animator
         final int adapterPosition = holder.getAdapterPosition();
-        if (!mCanceled && shouldAnimate(adapterPosition)) {
+        if (!mNotifyCanceled && shouldAnimate(adapterPosition)) {
             final int animCount = mAnimCount;
             final Animator[] animators = getAnimators(holder.itemView);
             if (animators == null || animators.length == 0) {
@@ -95,7 +101,7 @@ public abstract class AnimatorAdapter extends RecyclerView.Adapter<RecyclerView.
             for (final Animator anim : animators) {
                 anim.setDuration(mDuration);
                 anim.setInterpolator(mInterpolator);
-                anim.setStartDelay(mSartDelay);
+                anim.setStartDelay(mStartDelay);
                 new AnimateHelper(holder.itemView, adapterPosition, anim, animCount).start();
             }
             mLastPosition = adapterPosition;
@@ -147,7 +153,7 @@ public abstract class AnimatorAdapter extends RecyclerView.Adapter<RecyclerView.
         if (positions == null) {
             throw new NullPointerException();
         }
-        this.setCanceled(false);
+        this.setCancelNext(false);
         this.mAnimPositions = positions;
         this.setDuration(duration);
         this.setAnimateCount(count);
@@ -163,41 +169,79 @@ public abstract class AnimatorAdapter extends RecyclerView.Adapter<RecyclerView.
         return mAdapter;
     }
 
+    /**
+     * set the start delay of animator.
+     * @param delay the delay
+     */
     public void setStartDelay(long delay){
         if(delay < 0){
             delay = 0;
         }
-        this.mSartDelay = delay;
+        this.mStartDelay = delay;
     }
 
+    /**
+     * set the duration of animator.
+     * @param duration the duration
+     */
     public void setDuration(int duration) {
         mDuration = duration;
     }
 
+    /**
+     * set the Interpolator of animator.
+     * @param interpolator the interpolator
+     */
     public void setInterpolator(Interpolator interpolator) {
         mInterpolator = interpolator;
     }
 
+    /**
+     * set the start position of animate. that means if the position < target. it will not animate.
+     * @param start the start position.
+     */
     public void setStartPosition(int start) {
         mLastPosition = start;
     }
 
+    /**
+     * set the animate count. default is one.
+     * @param count the animate count.
+     */
     public void setAnimateCount(int count) {
         this.mAnimCount = count;
     }
 
+    /**
+     * set the animate every time or not.
+     * @param mAnimEveryTime true to animate every time.
+     */
     public void setAnimateEveryTime(boolean mAnimEveryTime) {
         this.mAnimEveryTime = mAnimEveryTime;
     }
 
     /**
-     * this will effect the next notify.
+     * this will effect the next notify adapter change.
+     * @param canceled true if cancel the animation in next notify.
      */
-    public void setCanceled(boolean mCanceled) {
-        this.mCanceled = mCanceled;
+    public void setCancelNext(boolean canceled) {
+        this.mNotifyCanceled = canceled;
+    }
+
+    /**
+     * set cancel the animator or not. this just effect the running animators.
+     * @param canceled true to cancel.
+     */
+    public void setCancelAnimator(boolean canceled){
+        mCancelAnim = canceled;
     }
     //================================================================
 
+    /**
+     * indicate the target position should animate or not.
+     * @param adapterPosition the position
+     * @return true if should animate
+     */
     protected boolean shouldAnimate(int adapterPosition) {
         if (mAnimPositions != null && mAnimPositions.length > 0) {
             for (int pos : mAnimPositions) {
@@ -211,8 +255,6 @@ public abstract class AnimatorAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
 
-    protected abstract Animator[] getAnimators(View itemView);
-
     /**
      * called on clear animator
      *
@@ -222,22 +264,34 @@ public abstract class AnimatorAdapter extends RecyclerView.Adapter<RecyclerView.
         AnimUtils.clearAnimator(itemView);
     }
 
+    /**
+     * called on animate end
+     * @param itemView the item view
+     * @param position the position.
+     */
     protected void onAnimateEnd(View itemView, int position) {
 
     }
+
+    /**
+     * get the animate to perform
+     * @param itemView the item view.
+     * @return the animators.
+     */
+    protected abstract Animator[] getAnimators(View itemView);
 
     /**
      * the animate helper
      */
     private class AnimateHelper extends AnimatorListenerAdapter {
         final View mItemView;
-        final int mPositon;
+        final int mPosition;
         final Animator anim;
         int count;
 
         public AnimateHelper(View itemView, int adapterPos, Animator anim, int count) {
             this.mItemView = itemView;
-            this.mPositon = adapterPos;
+            this.mPosition = adapterPos;
             this.anim = anim;
             this.count = count;
             this.anim.addListener(this);
@@ -250,12 +304,14 @@ public abstract class AnimatorAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public void start() {
             //Logger.i("AnimateHelper","start","count = " + count + ", hash = " + this.hashCode());
+            if(mCancelAnim){
+                setCancelAnimator(false);
+                onEnd();
+                return;
+            }
             if (count <= 0) {
-                setCanceled(true);
-                onAnimateEnd(mItemView, mPositon);
-                if (mCallback != null) {
-                    mCallback.onAnimateEnd(mItemView, mPositon);
-                }
+                setCancelNext(true);
+                onEnd();
                 return; //end
             }
             //start once now
@@ -263,6 +319,13 @@ public abstract class AnimatorAdapter extends RecyclerView.Adapter<RecyclerView.
                     ",already started ?=" + anim.isStarted());*/
             --count;
             anim.start();
+        }
+
+        private void onEnd(){
+            onAnimateEnd(mItemView, mPosition);
+            if (mCallback != null) {
+                mCallback.onAnimateEnd(mItemView, mPosition);
+            }
         }
     }
 

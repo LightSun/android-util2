@@ -24,9 +24,9 @@ import java.lang.ref.WeakReference;
 public class ImageHelper {
 
     private static final int NONE = 0;
-    private static final int PHOTO_PATH = 1;    // 拍照
-    private static final int PHOTO_ZOOM = 2;     // 缩放
-    private static final int PHOTO_RESOULT = 3;  // 结果
+    private static final int PHOTO_PATH   = 1;     // 拍照
+    private static final int PHOTO_ZOOM   = 2;     // 缩放
+    private static final int PHOTO_RESULT = 3;     // 结果
 
     private static final String IMAGE_UNSPECIFIED = "image/*";
 
@@ -36,26 +36,25 @@ public class ImageHelper {
     private boolean mDestroied;
     private File mFile;
 
-    //Environment.getExternalStorageDirectory() + "/class100/cache",
+    /**
+     * create image helper.
+     * @param dir the dir to save file.
+     * @param activity the activity.
+     * @param mCallback the image callback.
+     */
     public ImageHelper(String dir , Activity activity, ImageCallback mCallback) {
         this.mDir = dir;
         this.mWeakActivity = new WeakReference<Activity>(activity);
         this.mCallback = mCallback;
     }
 
-    //write sd card
-    private File getImageFile() {
-        File file = new File(mDir, "img_temp.jpg");
-        File parent = file.getParentFile();
-        if(!parent.exists()){
-            parent.mkdirs();
-        }
-        return file;
-    }
-
+    /**
+     * get image by zoom
+     */
     public void pick(){
         pick(null);
     }
+
     /**
      * get image by zoom
      */
@@ -71,16 +70,11 @@ public class ImageHelper {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         activity.startActivityForResult(intent, PHOTO_ZOOM);
     }
-
+    /**
+     * destroy this
+     */
     public void destroy() {
         this.mDestroied = true;
-    }
-
-    private Activity getActivity() {
-       final Activity activity = mWeakActivity.get();
-        if (activity == null)
-            throw new IllegalStateException("activity is mDestroied?");
-        return activity;
     }
 
     public void camera(){
@@ -88,7 +82,7 @@ public class ImageHelper {
     }
 
     /**
-     *
+     * use camera to get capture image.
      * @param path absolute mPath
      */
     public void camera(String path) {
@@ -121,7 +115,7 @@ public class ImageHelper {
                 startPhotoZoom(data.getData());
                 break;
 
-            case PHOTO_RESOULT:
+            case PHOTO_RESULT:
                 if(data == null || data.getExtras() == null){
                     try {
                         Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver()
@@ -145,7 +139,7 @@ public class ImageHelper {
                         }
                         mCallback.onSuccess(file, photo);
                     }else{
-                        Logger.w("ImageHelper","onActivityResult","PHOTO_RESOULT ====> but photo = null.");
+                        Logger.w("ImageHelper","onActivityResult","PHOTO_RESULT ====> but photo = null.");
                     }
                 }
 
@@ -153,6 +147,20 @@ public class ImageHelper {
         }
     }
 
+    //write sd card
+    private File getImageFile() {
+        File file = new File(mDir, "img_temp.jpg");
+        File parent = file.getParentFile();
+        if(!parent.exists()){
+            parent.mkdirs();
+        }
+        return file;
+    }
+
+    /**
+     * start zoom the photo
+     * @param uri the path which to save image file
+     */
     private void startPhotoZoom(Uri uri) {
         if (mDestroied) return;
         final Activity activity = getActivity();
@@ -170,12 +178,27 @@ public class ImageHelper {
         intent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(mFile = getImageFile()));
         mCallback.buildZoomIntent(intent);
 
-        activity.startActivityForResult(intent, PHOTO_RESOULT);
+        activity.startActivityForResult(intent, PHOTO_RESULT);
     }
 
+    private Activity getActivity() {
+        final Activity activity = mWeakActivity.get();
+        if (activity == null)
+            throw new IllegalStateException("activity is mDestroied?");
+        return activity;
+    }
+
+    /**
+     * the image callback
+     */
     public static abstract class ImageCallback{
 
 
+        /**
+         * called on get image success.
+         * @param mFile the saved image file
+         * @param photo the photo
+         */
         public abstract void onSuccess(File mFile, Bitmap photo);
 
         /**

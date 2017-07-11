@@ -11,6 +11,10 @@ import android.view.View;
 public class AnimUtils {
 
 
+    /**
+     * clear the animator of the target view.
+     * @param v the target view
+     */
     public static void clearAnimator(View v){
         ViewCompat.setAlpha(v, 1);
         ViewCompat.setScaleY(v, 1);

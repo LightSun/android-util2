@@ -43,7 +43,6 @@ public class NetworkCompatUtil {
             NetworkInfo[] networkInfoList = cm.getAllNetworkInfo();
             if (networkInfoList != null) {
                 for (int i = 0; i < networkInfoList.length; i++) {
-                    // 判断网络是否已连接
                     if (networkInfoList[i].getState() == NetworkInfo.State.CONNECTED) {
                         list.add(networkInfoList[i]);
                     }
