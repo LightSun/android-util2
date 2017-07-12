@@ -40,7 +40,7 @@ dependencies {
     apt "com.jakewharton:butterknife-compiler:8.2.0"
     compile "com.jakewharton:butterknife:${BUTTER_KNIFE_VERSION}"
 
-    compile 'com.heaven7.android.demolib:android-demo-lib:1.0.1'
+    //compile 'com.heaven7.android.demolib:android-demo-lib:1.0.1'
 
     compile project(':android-util2')
 }

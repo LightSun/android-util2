@@ -1,6 +1,5 @@
 package com.heaven7.android.util2.demo;
 
-import com.heaven7.android.demolib.activity.AbsMainActivity;
 import com.heaven7.android.util2.demo.sample.ToastTestActivity;
 
 import java.util.List;
