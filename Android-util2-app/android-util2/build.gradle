@@ -33,8 +33,9 @@ dependencies {
     compile "com.android.support:recyclerview-v7:25.3.1"
     testCompile 'junit:junit:4.12'
 
-    compile 'com.heaven7.core.adapter:adapter:1.8.8'
+    compile 'com.heaven7.core.adapter:adapter:1.8.5' // 1.8.8
     compile 'com.heaven7.java.base:Java-base:1.0.6'
+    compile 'com.heaven7.core.util:util-v1:1.1.2'
 }
 
 ext {
