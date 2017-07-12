@@ -6,6 +6,7 @@ import android.graphics.PixelFormat;
 import android.os.Build;
 import android.support.annotation.AnyThread;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.annotation.UiThread;
@@ -122,34 +123,18 @@ public abstract class BaseWindow implements IWindow {
         mUsingConfig.wlp.gravity = gravity;
         return this;
     }
-    /**
-     * set a runnable run on window start show.
-     * @param action the show action
-     * @return this
-     */
     @Override
     public BaseWindow withStartAction(Runnable action) {
         this.mStart = action;
         return this;
     }
 
-    /**
-     * set a runnable run on window end(without cancel outside).
-     * @param action the end action
-     * @return this
-     */
     @Override
     public BaseWindow withEndAction(Runnable action) {
         this.mEnd = action;
         return this;
     }
 
-    /**
-     * position the window at the target x, y.
-     * @param x the x position in pixes
-     * @param y the y position in pixes.
-     * @return this.
-     */
     @Override
     public BaseWindow position(int x, int y){
         mUsingConfig.wlp.x = x;
@@ -158,17 +143,12 @@ public abstract class BaseWindow implements IWindow {
     }
 
     @Override
-    public IWindow bindView(IViewBinder binder) {
+    public IWindow bindView(@NonNull IViewBinder binder) {
         Throwables.checkNull(binder);
         binder.onBind(getWindowView());
         return this;
     }
 
-    /**
-     * enable or disable the click of this window.
-     * @param enable true to enable. false to disable.
-     * @return this.
-     */
     @Override
     public BaseWindow enableClick(boolean enable) {
         if (enable) {
@@ -181,13 +161,6 @@ public abstract class BaseWindow implements IWindow {
         return this;
     }
 
-    /**
-     * set the window view to another view which is assigned by the layout.
-     * @param layout the layout id.
-     * @param parent the parent of layout. can be null.
-     * @param binder the view binder.
-     * @return this.
-     */
     @Override
     public BaseWindow layout(@LayoutRes int layout, @Nullable ViewGroup parent, @Nullable IViewBinder binder) {
         mWindowView = LayoutInflater.from(mContext).inflate(layout, parent);
@@ -197,20 +170,12 @@ public abstract class BaseWindow implements IWindow {
         return this;
     }
 
-    /**
-     * assign the animation style.
-     * @param animStyle the anim style resource id
-     * @return this.
-     */
     @Override
     public BaseWindow animateStyle(@StyleRes int animStyle) {
         mUsingConfig.wlp.windowAnimations = animStyle;
         return this;
     }
 
-    /**
-     * show the window.
-     */
     @AnyThread
     @Override
     public void show() {
@@ -251,9 +216,6 @@ public abstract class BaseWindow implements IWindow {
         }
     }
 
-    /**
-     * cancel the showing window.
-     */
     @UiThread
     public void cancel() {
         MainWorker.remove(mCancelRun);

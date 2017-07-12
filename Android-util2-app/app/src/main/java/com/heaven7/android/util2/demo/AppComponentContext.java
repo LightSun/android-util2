@@ -23,7 +23,7 @@ public interface AppComponentContext {
      * get the toaster.
      * @return  the {@link Toaster}
      */
-    IWindow getToaster();
+    IWindow getToastWindow();
 
     /**
      * on initialize

@@ -30,15 +30,15 @@ public class ToastTestActivity extends BaseActivity {
 
     @OnClick(R.id.bt_toast_normal)
     public void onClickNormalToast(View v){
-        getToaster().type(IWindow.TYPE_NORMAL).show("your toast message");
+        getToastWindow().type(IWindow.TYPE_NORMAL).show("your toast message");
     }
     @OnClick(R.id.bt_toast_warn)
     public void onClickWarnToast(View v){
-        getToaster().type(IWindow.TYPE_WARN).show("your toast message");
+        getToastWindow().type(IWindow.TYPE_WARN).show("your toast message");
     }
     @OnClick(R.id.bt_toast_error)
     public void onClickErrorToast(View v){
-        getToaster().type(IWindow.TYPE_ERROR).show("your toast message");
+        getToastWindow().type(IWindow.TYPE_ERROR).show("your toast message");
     }
     @OnClick(R.id.bt_toast_click)
     public void onClickClickToast(View v){
@@ -48,7 +48,7 @@ public class ToastTestActivity extends BaseActivity {
                 Toaster.show(v.getContext(), "Toast view was clicked.");
             }
         };
-        getToaster()
+        getToastWindow()
                 .type(IWindow.TYPE_WARN)
                 .enableClick(true)
                 .bindView(new IWindow.IViewBinder() {

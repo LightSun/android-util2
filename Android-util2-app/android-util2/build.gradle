@@ -33,3 +33,33 @@ dependencies {
     compile 'com.heaven7.core.adapter:adapter:1.8.8'
     compile 'com.heaven7.java.base:Java-base:1.0.6'
 }
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'android-util2'   // Has to be same as your library module name
+
+    publishedGroupId = 'com.heaven7.android.util2'
+    libraryName = bintrayName
+    artifact = bintrayName     // Has to be same as your library module name
+
+    libraryDescription = 'Android util2 '
+
+    // Your github repo link
+    siteUrl = 'https://github.com/LightSun/android-util2'
+    gitUrl = siteUrl + '.git'
+    githubRepository= 'LightSun/android-util2'
+
+    libraryVersion = '1.0'
+
+    developerId = 'heaven7'
+    developerName = 'heaven7'
+    developerEmail = 'donshine723@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+apply from: 'https://raw.githubusercontent.com/nisrulz/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nisrulz/JCenter/master/bintrayv1.gradle'
+//gradlew clean build install bintrayUpload

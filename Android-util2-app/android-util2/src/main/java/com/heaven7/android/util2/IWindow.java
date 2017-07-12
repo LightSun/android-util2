@@ -100,7 +100,7 @@ public interface IWindow {
      * @param binder  the view binder
      * @return this
      */
-    IWindow layout(@LayoutRes int layout, @Nullable ViewGroup parent, IViewBinder binder);
+    IWindow layout(@LayoutRes int layout, @Nullable ViewGroup parent,@Nullable IViewBinder binder);
 
     /**
      * bind the view by the {@linkplain IViewBinder}

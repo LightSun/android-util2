@@ -60,7 +60,7 @@ public abstract class BaseActivity extends AppCompatActivity implements AppCompo
 
     }
 
-    public final SimpleToast getToaster(){
+    public final SimpleToast getToastWindow(){
         return SimpleToast.create(this);
     }
 
