@@ -15,10 +15,13 @@ buildscript {
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
     }
 }
-
 allprojects {
     repositories {
         jcenter()
+    }
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('encoding', 'UTF-8')
     }
 }
 
