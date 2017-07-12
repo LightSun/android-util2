@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">android-util2</string>
+    <string name="test_toast">test toast</string>
+    <string name="click_toast">click toast</string>
+    <string name="error_toast">error toast</string>
+    <string name="warn_toast">warn toast</string>
+    <string name="normal_toast">normal toast</string>
 </resources>
