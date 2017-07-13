@@ -33,8 +33,22 @@ public class ToastTestActivity extends BaseActivity {
         getToastWindow().type(IWindow.TYPE_NORMAL).show("your toast message");
     }
     @OnClick(R.id.bt_toast_warn)
-    public void onClickWarnToast(View v){
-        getToastWindow().type(IWindow.TYPE_WARN).show("your toast message");
+    public void onClickWarnToast(final View v){
+        getToastWindow()
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toaster.show(v.getContext(), "action end...");
+                    }
+                })
+                .withStartAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toaster.show(v.getContext(), "action start...");
+                    }
+                })
+                .type(IWindow.TYPE_WARN)
+                .show("your toast message");
     }
     @OnClick(R.id.bt_toast_error)
     public void onClickErrorToast(View v){

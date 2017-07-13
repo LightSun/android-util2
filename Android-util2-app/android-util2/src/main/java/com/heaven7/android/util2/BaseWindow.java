@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.AnyThread;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -17,7 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import com.heaven7.core.util.MainWorker;
+import com.heaven7.core.util.WeakHandler;
 import com.heaven7.java.base.anno.IntDef;
 import com.heaven7.java.base.util.Throwables;
 
@@ -30,24 +32,21 @@ import java.lang.annotation.RetentionPolicy;
  */
 public abstract class BaseWindow implements IWindow {
 
+    private static final byte EXT_CALLBACK = 1;
+    private static final byte MSG_SHOW     = 2;
+    private static final byte MSG_CANCEL   = 4;
+
     private final WindowManager mWM;
     private final Context mContext;
 
-    private final Runnable mCancelRun = new Runnable() {
-        @Override
-        public void run() {
-            cancel();
-            if (mEnd != null) {
-                mEnd.run();
-                mEnd = null;
-            }
-        }
-    };
+    private final InternalHandler mHandler = new InternalHandler(this);
+    private final WindowConfig mDefaultConfig;
+    private final WindowConfig mUsingConfig;
+
     private boolean mShowing;
     private Runnable mStart;
     private Runnable mEnd;
-    private final WindowConfig mDefaultConfig;
-    private final WindowConfig mUsingConfig;
+
     private View mWindowView;
 
     @IntDef({
@@ -185,12 +184,18 @@ public abstract class BaseWindow implements IWindow {
     @AnyThread
     @Override
     public void show() {
-        MainWorker.post(new Runnable() {
-            @Override
-            public void run() {
-                showImpl();
-            }
-        });
+        mHandler.sendEmptyMessage(MSG_SHOW);
+    }
+
+    @AnyThread
+    public void cancel() {
+        mHandler.removeMessages(MSG_CANCEL);
+        mHandler.sendEmptyMessage(MSG_CANCEL);
+    }
+
+    @Override
+    public boolean isShowing() {
+        return mShowing;
     }
 
     @UiThread
@@ -211,31 +216,26 @@ public abstract class BaseWindow implements IWindow {
             mStart = null;
         }
         if (mShowing) {
-            cancel();
+            cancelImpl();
         }
         mShowing = true;
         //mWindowView.setY(-mWindowView.getMeasuredHeight());
         mWM.addView(mWindowView, mUsingConfig.wlp);
         //duration < 0, means until cancel.
         if (mUsingConfig.duration > 0) {
-            MainWorker.postDelay(mUsingConfig.duration, mCancelRun);
+            mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_CANCEL, EXT_CALLBACK, 0),
+                    mUsingConfig.duration);
         }
     }
 
     @UiThread
-    public void cancel() {
-        MainWorker.remove(mCancelRun);
+    private void cancelImpl(){
         if (mShowing) {
             if (mWindowView.getParent() != null) {
                 mWM.removeView(mWindowView);
             }
             mShowing = false;
         }
-    }
-
-    @Override
-    public boolean isShowing() {
-        return mShowing;
     }
 
     /**
@@ -278,4 +278,30 @@ public abstract class BaseWindow implements IWindow {
         return mParams;
     }
 
+    private static class InternalHandler extends WeakHandler<BaseWindow>{
+
+        public InternalHandler(BaseWindow baseWindow) {
+            super(Looper.getMainLooper(), baseWindow);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            BaseWindow window = get();
+            if(window != null){
+                switch (msg.what){
+                    case MSG_SHOW:
+                        window.showImpl();
+                        break;
+
+                    case MSG_CANCEL:
+                        window.cancelImpl();
+                        if(msg.arg1 == EXT_CALLBACK && window.mEnd != null){
+                            window.mEnd.run();
+                            window.mEnd = null;
+                        }
+                        break;
+                }
+            }
+        }
+    }
 }
