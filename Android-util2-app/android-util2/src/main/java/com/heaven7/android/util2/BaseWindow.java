@@ -2,6 +2,7 @@ package com.heaven7.android.util2;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.support.annotation.AnyThread;
@@ -25,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * the common window view . can be used as window and etc.
- * Created by heaven7 
+ * Created by heaven7
  */
 public abstract class BaseWindow implements IWindow {
 
@@ -36,7 +37,7 @@ public abstract class BaseWindow implements IWindow {
         @Override
         public void run() {
             cancel();
-            if(mEnd != null){
+            if (mEnd != null) {
                 mEnd.run();
                 mEnd = null;
             }
@@ -56,7 +57,7 @@ public abstract class BaseWindow implements IWindow {
             TYPE_ERROR,
     })
     @Retention(RetentionPolicy.SOURCE)
-    @interface WindowType{
+    @interface WindowType {
     }
 
     protected BaseWindow(Context context) {
@@ -72,14 +73,16 @@ public abstract class BaseWindow implements IWindow {
     public abstract void show(String msg);
 
     @Override
-    public void show(int resId){
+    public void show(int resId) {
         show(getContext().getString(resId));
     }
 
     //======================================================//
 
     @Override
-    public @WindowType int getType(){
+    public
+    @WindowType
+    int getType() {
         return mUsingConfig.type;
     }
 
@@ -96,6 +99,8 @@ public abstract class BaseWindow implements IWindow {
     @Override
     public IWindow setDefaultWindowConfig(WindowConfig config) {
         Throwables.checkNull(config);
+        Throwables.checkNull(config.wlp);
+        applyGravity(config.wlp.gravity, config.wlp);
         this.mDefaultConfig.copy(config);
         return reset();
     }
@@ -120,9 +125,10 @@ public abstract class BaseWindow implements IWindow {
 
     @Override
     public IWindow gravity(int gravity) {
-        mUsingConfig.wlp.gravity = gravity;
+        applyGravity(gravity, mUsingConfig.wlp);
         return this;
     }
+
     @Override
     public BaseWindow withStartAction(Runnable action) {
         this.mStart = action;
@@ -136,7 +142,7 @@ public abstract class BaseWindow implements IWindow {
     }
 
     @Override
-    public BaseWindow position(int x, int y){
+    public BaseWindow position(int x, int y) {
         mUsingConfig.wlp.x = x;
         mUsingConfig.wlp.y = y;
         return this;
@@ -164,7 +170,7 @@ public abstract class BaseWindow implements IWindow {
     @Override
     public BaseWindow layout(@LayoutRes int layout, @Nullable ViewGroup parent, @Nullable IViewBinder binder) {
         mWindowView = LayoutInflater.from(mContext).inflate(layout, parent);
-        if(binder != null){
+        if (binder != null) {
             binder.onBind(mWindowView);
         }
         return this;
@@ -189,29 +195,29 @@ public abstract class BaseWindow implements IWindow {
 
     @UiThread
     private void showImpl() {
-        if(mContext instanceof Activity){
+        if (mContext instanceof Activity) {
             Activity ac = ((Activity) mContext);
-            if(ac.isFinishing()){
+            if (ac.isFinishing()) {
                 //ignore
                 return;
             }
-            if(Build.VERSION.SDK_INT >= 17 && ac.isDestroyed()){
+            if (Build.VERSION.SDK_INT >= 17 && ac.isDestroyed()) {
                 //ignore
                 return;
             }
         }
-        if(mStart != null){
+        if (mStart != null) {
             mStart.run();
             mStart = null;
         }
-        if(mShowing) {
+        if (mShowing) {
             cancel();
         }
         mShowing = true;
         //mWindowView.setY(-mWindowView.getMeasuredHeight());
         mWM.addView(mWindowView, mUsingConfig.wlp);
         //duration < 0, means until cancel.
-        if(mUsingConfig.duration > 0) {
+        if (mUsingConfig.duration > 0) {
             MainWorker.postDelay(mUsingConfig.duration, mCancelRun);
         }
     }
@@ -220,7 +226,9 @@ public abstract class BaseWindow implements IWindow {
     public void cancel() {
         MainWorker.remove(mCancelRun);
         if (mShowing) {
-            mWM.removeView(mWindowView);
+            if (mWindowView.getParent() != null) {
+                mWM.removeView(mWindowView);
+            }
             mShowing = false;
         }
     }
@@ -230,6 +238,26 @@ public abstract class BaseWindow implements IWindow {
         return mShowing;
     }
 
+    /**
+     * apply the gravity for window params.
+     * @param expectGravity the expect gravity
+     * @param applyWlp the window layout params.
+     */
+    private void applyGravity(int expectGravity, WindowManager.LayoutParams applyWlp) {
+        if(Build.VERSION.SDK_INT >= 17){
+            final Configuration configuration = getContext().getResources().getConfiguration();
+            final int gravity = Gravity.getAbsoluteGravity(expectGravity, configuration.getLayoutDirection());
+            applyWlp.gravity = gravity;
+            if ((gravity & Gravity.HORIZONTAL_GRAVITY_MASK) == Gravity.FILL_HORIZONTAL) {
+                applyWlp.horizontalWeight = 1.0f;
+            }
+            if ((gravity & Gravity.VERTICAL_GRAVITY_MASK) == Gravity.FILL_VERTICAL) {
+                applyWlp.verticalWeight = 1.0f;
+            }
+        }else{
+            applyWlp.gravity = expectGravity;
+        }
+    }
 
     private WindowManager.LayoutParams createDefault(Context context) {
         WindowManager.LayoutParams mParams = new WindowManager.LayoutParams();
