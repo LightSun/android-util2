@@ -32,9 +32,8 @@ import java.lang.annotation.RetentionPolicy;
  */
 public abstract class BaseWindow implements IWindow {
 
-    private static final byte EXT_CALLBACK = 1;
-    private static final byte MSG_SHOW     = 2;
-    private static final byte MSG_CANCEL   = 4;
+    private static final byte MSG_SHOW   = 2;
+    private static final byte MSG_CANCEL = 4;
 
     private final WindowManager mWM;
     private final Context mContext;
@@ -184,7 +183,10 @@ public abstract class BaseWindow implements IWindow {
     @AnyThread
     @Override
     public void show() {
-        mHandler.sendEmptyMessage(MSG_SHOW);
+        final Params p = new Params(mStart, mEnd);
+        mStart = null;
+        mEnd = null;
+        mHandler.obtainMessage(MSG_SHOW, p).sendToTarget();
     }
 
     @AnyThread
@@ -199,7 +201,7 @@ public abstract class BaseWindow implements IWindow {
     }
 
     @UiThread
-    private void showImpl() {
+    private void showImpl(Params params) {
         if (mContext instanceof Activity) {
             Activity ac = ((Activity) mContext);
             if (ac.isFinishing()) {
@@ -211,9 +213,8 @@ public abstract class BaseWindow implements IWindow {
                 return;
             }
         }
-        if (mStart != null) {
-            mStart.run();
-            mStart = null;
+        if (params.start != null) {
+            params.start.run();
         }
         if (mShowing) {
             cancelImpl();
@@ -223,13 +224,13 @@ public abstract class BaseWindow implements IWindow {
         mWM.addView(mWindowView, mUsingConfig.wlp);
         //duration < 0, means until cancel.
         if (mUsingConfig.duration > 0) {
-            mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_CANCEL, EXT_CALLBACK, 0),
+            mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_CANCEL, params),
                     mUsingConfig.duration);
         }
     }
 
     @UiThread
-    private void cancelImpl(){
+    private void cancelImpl() {
         if (mShowing) {
             if (mWindowView.getParent() != null) {
                 mWM.removeView(mWindowView);
@@ -240,11 +241,12 @@ public abstract class BaseWindow implements IWindow {
 
     /**
      * apply the gravity for window params.
+     *
      * @param expectGravity the expect gravity
-     * @param applyWlp the window layout params.
+     * @param applyWlp      the window layout params.
      */
     private void applyGravity(int expectGravity, WindowManager.LayoutParams applyWlp) {
-        if(Build.VERSION.SDK_INT >= 17){
+        if (Build.VERSION.SDK_INT >= 17) {
             final Configuration configuration = getContext().getResources().getConfiguration();
             final int gravity = Gravity.getAbsoluteGravity(expectGravity, configuration.getLayoutDirection());
             applyWlp.gravity = gravity;
@@ -254,7 +256,7 @@ public abstract class BaseWindow implements IWindow {
             if ((gravity & Gravity.VERTICAL_GRAVITY_MASK) == Gravity.FILL_VERTICAL) {
                 applyWlp.verticalWeight = 1.0f;
             }
-        }else{
+        } else {
             applyWlp.gravity = expectGravity;
         }
     }
@@ -278,7 +280,16 @@ public abstract class BaseWindow implements IWindow {
         return mParams;
     }
 
-    private static class InternalHandler extends WeakHandler<BaseWindow>{
+    private static class Params {
+        Runnable start;
+        Runnable end;
+        public Params(Runnable start, Runnable end) {
+            this.start = start;
+            this.end = end;
+        }
+    }
+
+    private static class InternalHandler extends WeakHandler<BaseWindow> {
 
         public InternalHandler(BaseWindow baseWindow) {
             super(Looper.getMainLooper(), baseWindow);
@@ -287,17 +298,17 @@ public abstract class BaseWindow implements IWindow {
         @Override
         public void handleMessage(Message msg) {
             BaseWindow window = get();
-            if(window != null){
-                switch (msg.what){
+            if (window != null) {
+                switch (msg.what) {
                     case MSG_SHOW:
-                        window.showImpl();
+                        window.showImpl((Params) msg.obj);
                         break;
 
                     case MSG_CANCEL:
                         window.cancelImpl();
-                        if(msg.arg1 == EXT_CALLBACK && window.mEnd != null){
-                            window.mEnd.run();
-                            window.mEnd = null;
+                        Runnable end = msg.obj != null ? ((Params) msg.obj).end : null;
+                        if (end != null) {
+                            end.run();
                         }
                         break;
                 }
