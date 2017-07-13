@@ -3,8 +3,6 @@ package com.heaven7.android.util2;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Build;
-import android.util.Log;
-import android.view.View;
 
 import com.heaven7.core.util.Logger;
 import com.heaven7.java.base.util.Throwables;
@@ -43,7 +41,7 @@ public class WeakObject<T> {
                 return null;
             }
             if (Build.VERSION.SDK_INT >= 17 && ac.isDestroyed()) {
-                Log.w("WeakActivityOwner","getActivity(): memory leaked ? activity = "
+                Logger.w(TAG, "get","memory leaked ? activity = "
                         + name);
                 return null;
             }
@@ -65,13 +63,13 @@ public class WeakObject<T> {
             }
             return t;
         }
-        if(t instanceof View){
+       /* if(t instanceof View){
             if(Build.VERSION.SDK_INT >= 19 && !((View) t).isAttachedToWindow()){
                 Logger.w(TAG,"get","view is detached. memory leaked?  view = " + name);
                 return null;
             }
             return t;
-        }
+        }*/
         return t;
     }
 
