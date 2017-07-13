@@ -281,9 +281,9 @@ public abstract class BaseWindow implements IWindow {
     }
 
     private static class Params {
-        Runnable start;
-        Runnable end;
-        public Params(Runnable start, Runnable end) {
+        final Runnable start;
+        final Runnable end;
+        Params(Runnable start, Runnable end) {
             this.start = start;
             this.end = end;
         }
