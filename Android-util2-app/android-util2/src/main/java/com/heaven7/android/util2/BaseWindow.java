@@ -128,19 +128,19 @@ public abstract class BaseWindow implements IWindow {
     }
 
     @Override
-    public BaseWindow withStartAction(Runnable action) {
+    public IWindow withStartAction(Runnable action) {
         this.mStart = action;
         return this;
     }
 
     @Override
-    public BaseWindow withEndAction(Runnable action) {
+    public IWindow withEndAction(Runnable action) {
         this.mEnd = action;
         return this;
     }
 
     @Override
-    public BaseWindow position(int x, int y) {
+    public IWindow position(int x, int y) {
         mUsingConfig.wlp.x = x;
         mUsingConfig.wlp.y = y;
         return this;
@@ -154,7 +154,7 @@ public abstract class BaseWindow implements IWindow {
     }
 
     @Override
-    public BaseWindow enableClick(boolean enable) {
+    public IWindow enableClick(boolean enable) {
         if (enable) {
             mUsingConfig.wlp.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
         } else {
@@ -166,7 +166,7 @@ public abstract class BaseWindow implements IWindow {
     }
 
     @Override
-    public BaseWindow layout(@LayoutRes int layout, @Nullable ViewGroup parent, @Nullable IViewBinder binder) {
+    public IWindow layout(@LayoutRes int layout, @Nullable ViewGroup parent, @Nullable IViewBinder binder) {
         mWindowView = LayoutInflater.from(mContext).inflate(layout, parent);
         if (binder != null) {
             binder.onBind(mWindowView);
@@ -175,7 +175,7 @@ public abstract class BaseWindow implements IWindow {
     }
 
     @Override
-    public BaseWindow animateStyle(@StyleRes int animStyle) {
+    public IWindow animateStyle(@StyleRes int animStyle) {
         mUsingConfig.wlp.windowAnimations = animStyle;
         return this;
     }
