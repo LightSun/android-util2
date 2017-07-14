@@ -98,7 +98,7 @@ public abstract class BaseWindow implements IWindow {
     public IWindow setDefaultWindowConfig(WindowConfig config) {
         Throwables.checkNull(config);
         Throwables.checkNull(config.wlp);
-        applyGravity(config.wlp.gravity, config.wlp);
+        applyGravity(getContext(),config.wlp.gravity, config.wlp);
         this.mDefaultConfig.copy(config);
         return reset();
     }
@@ -123,7 +123,7 @@ public abstract class BaseWindow implements IWindow {
 
     @Override
     public IWindow gravity(int gravity) {
-        applyGravity(gravity, mUsingConfig.wlp);
+        applyGravity(getContext(), gravity, mUsingConfig.wlp);
         return this;
     }
 
@@ -239,28 +239,6 @@ public abstract class BaseWindow implements IWindow {
         }
     }
 
-    /**
-     * apply the gravity for window params.
-     *
-     * @param expectGravity the expect gravity
-     * @param applyWlp      the window layout params.
-     */
-    private void applyGravity(int expectGravity, WindowManager.LayoutParams applyWlp) {
-        if (Build.VERSION.SDK_INT >= 17) {
-            final Configuration configuration = getContext().getResources().getConfiguration();
-            final int gravity = Gravity.getAbsoluteGravity(expectGravity, configuration.getLayoutDirection());
-            applyWlp.gravity = gravity;
-            if ((gravity & Gravity.HORIZONTAL_GRAVITY_MASK) == Gravity.FILL_HORIZONTAL) {
-                applyWlp.horizontalWeight = 1.0f;
-            }
-            if ((gravity & Gravity.VERTICAL_GRAVITY_MASK) == Gravity.FILL_VERTICAL) {
-                applyWlp.verticalWeight = 1.0f;
-            }
-        } else {
-            applyWlp.gravity = expectGravity;
-        }
-    }
-
     private WindowManager.LayoutParams createDefault(Context context) {
         WindowManager.LayoutParams mParams = new WindowManager.LayoutParams();
         mParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
@@ -278,6 +256,28 @@ public abstract class BaseWindow implements IWindow {
         mParams.setTitle("window");
         // mParams.token = ((Activity)context)
         return mParams;
+    }
+
+    /**
+     * apply the gravity for window params.
+     *
+     * @param expectGravity the expect gravity
+     * @param applyWlp      the window layout params.
+     */
+    private static void applyGravity(Context context,int expectGravity, WindowManager.LayoutParams applyWlp) {
+        if (Build.VERSION.SDK_INT >= 17) {
+            final Configuration configuration = context.getResources().getConfiguration();
+            final int gravity = Gravity.getAbsoluteGravity(expectGravity, configuration.getLayoutDirection());
+            applyWlp.gravity = gravity;
+            if ((gravity & Gravity.HORIZONTAL_GRAVITY_MASK) == Gravity.FILL_HORIZONTAL) {
+                applyWlp.horizontalWeight = 1.0f;
+            }
+            if ((gravity & Gravity.VERTICAL_GRAVITY_MASK) == Gravity.FILL_VERTICAL) {
+                applyWlp.verticalWeight = 1.0f;
+            }
+        } else {
+            applyWlp.gravity = expectGravity;
+        }
     }
 
     private static class Params {
