@@ -16,6 +16,7 @@ import javax.net.ssl.TrustManagerFactory;
 /**
  * https helper.
  * @author heaven7
+ * @since 1.0.2
  */
 public class HttpsHelper {
 

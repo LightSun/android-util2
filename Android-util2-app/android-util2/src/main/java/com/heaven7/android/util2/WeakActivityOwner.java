@@ -7,6 +7,7 @@ import android.util.Log;
 import java.lang.ref.WeakReference;
 
 /**
+ * a class help we handle weak reference of activity.
  * Created by heaven7 on 2017/7/11 0011.
  */
 
