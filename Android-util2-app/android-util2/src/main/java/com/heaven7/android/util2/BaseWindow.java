@@ -28,6 +28,7 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * the common window view . can be used as window and etc.
+ * Note: you must call {@linkplain #cancel()} before activity destroy.
  * Created by heaven7
  */
 public abstract class BaseWindow implements IWindow {

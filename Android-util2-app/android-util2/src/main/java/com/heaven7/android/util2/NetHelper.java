@@ -11,7 +11,6 @@ import android.telephony.TelephonyManager;
 import com.heaven7.core.util.Logger;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * the network helper : help we handle handle intent action --> 'android.net.conn.CONNECTIVITY_CHANGE'.
@@ -34,7 +33,7 @@ public final class NetHelper extends BroadcastReceiver {
 
     private static final String TAG = "NetHelper";
     private static final IntentFilter sIntentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
-    private ArrayList<OnNetStateChangedListener> mListeners;
+    private final ArrayList<OnNetStateChangedListener> mListeners;
     private volatile boolean mRegistered;
 
     /**
@@ -87,7 +86,7 @@ public final class NetHelper extends BroadcastReceiver {
             context.registerReceiver(this, sIntentFilter);
             mRegistered = true;
         } catch (Exception e) {
-            Logger.w(TAG, "registerReceiver", Logger.toString(e));
+            Logger.w(TAG, "register", Logger.toString(e));
         }
 
     }
@@ -101,7 +100,7 @@ public final class NetHelper extends BroadcastReceiver {
                 context.unregisterReceiver(this);
                 mRegistered = false;
             } catch (Exception e) {
-                Logger.w(TAG, "unRegisterReceiver", Logger.toString(e));
+                Logger.w(TAG, "unregister", Logger.toString(e));
             }
         }
     }

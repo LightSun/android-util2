@@ -141,7 +141,7 @@ public interface IWindow {
     boolean isShowing();
 
     /**
-     * show the window by default setting.
+     * show the window by previous setting.
      */
     void show();
 
