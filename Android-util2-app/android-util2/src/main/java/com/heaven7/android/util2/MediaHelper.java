@@ -9,6 +9,7 @@ import com.heaven7.java.base.util.Throwables;
 import java.io.IOException;
 
 /**
+ * this class help we handle media player.
  * Created by heaven7 on 2017/7/5 0005.
  */
 

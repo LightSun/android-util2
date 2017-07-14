@@ -1,6 +1,6 @@
 package com.heaven7.android.util2;
 
-import android.animation.Animator;
+import android.animation.*;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -283,7 +283,7 @@ public abstract class AnimatorAdapter extends RecyclerView.Adapter<RecyclerView.
     /**
      * the animate helper
      */
-    private class AnimateHelper extends AnimatorListenerAdapter {
+    private class AnimateHelper extends android.animation.AnimatorListenerAdapter {
         final View mItemView;
         final int mPosition;
         final Animator anim;

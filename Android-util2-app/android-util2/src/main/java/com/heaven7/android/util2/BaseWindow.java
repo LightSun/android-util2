@@ -239,7 +239,7 @@ public abstract class BaseWindow implements IWindow {
         }
     }
 
-    private WindowManager.LayoutParams createDefault(Context context) {
+    public static WindowManager.LayoutParams createDefault(Context context) {
         WindowManager.LayoutParams mParams = new WindowManager.LayoutParams();
         mParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         mParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
