@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * stack over flow of android.
  * https://stackoverflow.com/documentation/android/103/intent#t=201707140757431233948
+ * 所有 android 的文档： https://stackoverflow.com/documentation/android/topics?page=5&tab=popular
  * Created by heaven7 on 2017/7/14 0014.
  */
 
