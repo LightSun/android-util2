@@ -122,7 +122,7 @@ public class GradientHelper {
      * @see GradientDrawable#setColor(int)
      */
     @TargetApi(16)
-    public GradientHelper setColors(@ColorInt int[] colors) {
+    public GradientHelper setGradientColors(@ColorInt int[] colors) {
         mGd.setColors(colors);
         return this;
     }
@@ -143,7 +143,7 @@ public class GradientHelper {
      * @see GradientDrawable#getColor
      */
     @TargetApi(21)
-    public GradientHelper setColor(@Nullable ColorStateList colorStateList) {
+    public GradientHelper setSolidColors(@Nullable ColorStateList colorStateList) {
         mGd.setColor(colorStateList);
         return this;
     }
