@@ -53,6 +53,7 @@ public class GradientHelper {
                 this.mGd = new GradientDrawable();
             }
         }
+        mGd.mutate();
     }
 
     /**
@@ -64,6 +65,16 @@ public class GradientHelper {
      */
     public static GradientHelper of(View target, @Nullable GradientDrawable gd) {
         return new GradientHelper(target, gd);
+    }
+
+    /**
+     *  Make this drawable mutable.
+     * @return this.
+     * @see Drawable#mutate()
+     */
+    public GradientHelper mutate(){
+        mGd.mutate();
+        return this;
     }
 
     public GradientHelper setAlpha(int alpha) {
