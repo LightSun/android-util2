@@ -11,6 +11,7 @@ import com.heaven7.java.base.util.SmartReference;
 /**
  * the SmartReference of android platform.
  * Created by heaven7.
+ * @since 1.0.3
  */
 
 public class AndroidSmartReference<T> extends SmartReference<T> {
