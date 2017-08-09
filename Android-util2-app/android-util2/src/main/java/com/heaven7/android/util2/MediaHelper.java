@@ -147,6 +147,16 @@ public class MediaHelper {
     protected String getLocalFile(String url){
         return url;
     }
+
+    /**
+     * indicate the resource should prepare async or not.
+     * @param link the last link. url or file path
+     * @return true if should prepare async.
+     * @since 1.0.3
+     */
+    protected boolean shouldPrepareAsync(String  link){
+        return link.startsWith("http://") || link.startsWith("https://");
+    }
     //====================================================
     private boolean startPlayFile(final String filename, final int position){
         Logger.d(TAG,"startPlayFile","filename/url = " + filename);
@@ -170,7 +180,11 @@ public class MediaHelper {
                     }
                 });
                 setStateInternal(STATE_BUFFERING);
-                mPlayer.prepareAsync();
+                if(shouldPrepareAsync(filename)) {
+                    mPlayer.prepareAsync();
+                }else{
+                    mPlayer.prepare();
+                }
                 return true;
             } catch (IOException e) {
                 if(mPlayer != null) {
@@ -236,7 +250,7 @@ public class MediaHelper {
 
         @Override
         public boolean onError(MediaPlayer mp, int what, int extra) {
-            Logger.e(TAG, "showNormalUi", "what = " + what + " , extra = " + extra);
+            Logger.e(TAG, "onError", "what = " + what + " , extra = " + extra);
             return false;
         }
     }

@@ -40,11 +40,11 @@ public class AndroidSmartReference<T> extends SmartReference<T> {
         if(t instanceof Activity){
             final Activity ac = (Activity) t;
             if(ac.isFinishing()){
-                Logger.w(TAG,"get","the activity(" + name + ") is finishing.");
+                Logger.w(TAG,"shouldDestroyReference","the activity(" + name + ") is finishing.");
                 return true;
             }
             if (Build.VERSION.SDK_INT >= 17 && ac.isDestroyed()) {
-                Logger.w(TAG, "get","memory leaked ? activity = "
+                Logger.w(TAG, "shouldDestroyReference","memory leaked ? activity = "
                         + name);
                 return true;
             }
@@ -52,14 +52,14 @@ public class AndroidSmartReference<T> extends SmartReference<T> {
         if(t instanceof android.support.v4.app.Fragment){
             final android.support.v4.app.Fragment frag = (android.support.v4.app.Fragment) t;
             if(frag.isDetached() || frag.isRemoving()){
-                Logger.w(TAG,"get","fragment is detached or removing. fragment = " + name);
+                Logger.w(TAG,"shouldDestroyReference","fragment is detached or removing. fragment = " + name);
                 return true;
             }
         }
         if( t instanceof Fragment){
             final Fragment frag = (Fragment) t;
             if(frag.isDetached() || frag.isRemoving()){
-                Logger.w(TAG,"get","fragment is detached or removing. fragment = " + name);
+                Logger.w(TAG,"shouldDestroyReference","fragment is detached or removing. fragment = " + name);
                 return true;
             }
         }
