@@ -13,6 +13,8 @@ import com.heaven7.core.util.Logger;
 import com.heaven7.java.base.util.ArrayUtils;
 import com.heaven7.java.base.util.Throwables;
 
+import static com.heaven7.android.util2.ViewUtil.getStatusHeight;
+
 /**
  * the class help we handle the guide.
  * Created by heaven7 on 2017/8/9 0009.
@@ -219,21 +221,6 @@ public final class GuideHelper {
     private void clearChildren() {
         ViewGroup vg = (ViewGroup) mWindow.getWindowView();
         vg.removeAllViews();
-    }
-
-    private static int getStatusHeight(Context context) {
-        //com.android.internal.R.dimen.status_bar_height
-        int statusHeight = 25; //default is 25
-        try {
-            Class<?> clazz = Class.forName("com.android.internal.R$dimen");
-            Object object = clazz.newInstance();
-            int height = Integer.parseInt(clazz.getField("status_bar_height")
-                    .get(object).toString());
-            statusHeight = context.getResources().getDimensionPixelSize(height);
-        } catch (Exception e) {
-            //ignore
-        }
-        return statusHeight;
     }
 
     /**

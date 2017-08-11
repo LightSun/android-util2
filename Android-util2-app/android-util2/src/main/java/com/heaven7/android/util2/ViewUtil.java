@@ -15,6 +15,26 @@ import android.view.WindowManager;
 public final class ViewUtil {
 
     /**
+     * get the state bar height.
+     * @param context the context
+     * @return the state bar height.
+     * @since 1.0.5
+     */
+    public static int getStatusHeight(Context context) {
+        //com.android.internal.R.dimen.status_bar_height
+        int statusHeight = 25; //default is 25
+        try {
+            Class<?> clazz = Class.forName("com.android.internal.R$dimen");
+            Object object = clazz.newInstance();
+            int height = Integer.parseInt(clazz.getField("status_bar_height")
+                    .get(object).toString());
+            statusHeight = context.getResources().getDimensionPixelSize(height);
+        } catch (Exception e) {
+            //ignore
+        }
+        return statusHeight;
+    }
+    /**
      * request focus for target view
      * @param v the target view.
      */
