@@ -181,17 +181,22 @@ public final class GuideHelper {
     }
 
     /**
-     * dismiss the guide window.
+     * cancel the guide and will not notify callback of dismiss.
+     * this method is unlike the {@linkplain #dismiss()}.
+     * @see #dismiss()
+     * @since 1.0.5
+     */
+    public void cancel(){
+        dismissInternal(false);
+    }
+    /**
+     * dismiss the guide window and notify dismiss if need.
+     * this method is unlike the {@linkplain #cancel()} ()}.
+     * @see #cancel()
      */
     public void dismiss() {
-        mWindow.cancel();
-        clearChildren();
-        if(mCallback != null) {
-            mCallback.onDismiss();
-            mCallback = null;
-        }
+        dismissInternal(true);
     }
-
     /**
      * get the guide layout id  which will be used as root view
      * @return the guide layout id.
@@ -201,6 +206,15 @@ public final class GuideHelper {
     }
 
     //======================= start private ===============
+
+    private void dismissInternal(boolean callback) {
+        mWindow.cancel();
+        clearChildren();
+        if(callback && mCallback != null) {
+            mCallback.onDismiss();
+        }
+        mCallback = null;
+    }
 
     private void clearChildren() {
         ViewGroup vg = (ViewGroup) mWindow.getWindowView();
@@ -256,7 +270,7 @@ public final class GuideHelper {
         }
 
         /**
-         * get tip view
+         * get tip view. may be null
          * @return tip view
          */
         public View getTip() {
@@ -288,7 +302,7 @@ public final class GuideHelper {
                 return this;
             }
             /**
-             * assign the tip view
+             * assign the tip view, may be null.
              * @param tip the tip view
              * @return this.
              */
@@ -312,7 +326,6 @@ public final class GuideHelper {
              */
             public GuideComponent build(){
                 Throwables.checkNull(gc.anchor);
-                Throwables.checkNull(gc.tip);
                 Throwables.checkNull(gc.rp);
                 return gc;
             }
@@ -429,18 +442,7 @@ public final class GuideHelper {
             ((ViewGroup) copy.getParent()).removeView(copy);
 
             ViewGroup vg = (ViewGroup) mWindow.getWindowView();
-            final View tip = component.getTip();
             final View anchor = component.getAnchor();
-            final RelativeLocation rp = component.getRelativeLocation();
-
-            if(tip.getParent() != null){
-                ((ViewGroup)tip.getParent()).removeView(tip);
-            }
-            //tip must be wrap_content or determinate
-            int spec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-            tip.measure(spec, spec);
-            final int tipMeaWidth = tip.getMeasuredWidth();
-            final int tipMeaHeight = tip.getMeasuredHeight();
 
             final int[] cors = new int[2];
             anchor.getLocationOnScreen(cors);
@@ -454,45 +456,59 @@ public final class GuideHelper {
             mlp.leftMargin = x;
             mlp.topMargin = y;
             vg.addView(copy, mlp);
-
-            final int offSet = rp.getOffSet(anchor.getWidth(), anchor.getHeight(), tipMeaWidth, tipMeaHeight);
-            mlp = new FrameLayout.MarginLayoutParams(tipMeaWidth, tipMeaHeight);
-            switch (rp.align) {
-                case ALIGN_TOP:
-                    mlp.topMargin = y - rp.margin - tipMeaHeight;
-                    mlp.leftMargin = anchorCenterX - tipMeaWidth / 2 - offSet;
-                    break;
-
-                case ALIGN_LEFT:
-                    mlp.topMargin = anchorCenterY - tipMeaHeight / 2 - offSet;
-                    mlp.leftMargin = x - rp.margin - tipMeaWidth;
-                    break;
-
-                case ALIGN_RIGHT:
-                    mlp.topMargin = anchorCenterY - tipMeaHeight / 2 - offSet;
-                    mlp.leftMargin = x + anchor.getWidth() + rp.margin;
-                    break;
-
-                case ALIGN_BOTTOM:
-                    mlp.leftMargin = anchorCenterX - tipMeaWidth / 2 - offSet;
-                    mlp.topMargin = y + anchor.getHeight() + rp.margin;
-                    break;
-
-                default:
-                    throw new UnsupportedOperationException();
-            }
-            vg.addView(tip, mlp);
             mCallback.onBindData(copy);
+            //tip may be null.
+            final View tip = component.getTip();
+            if(tip != null) {
+                final RelativeLocation rp = component.getRelativeLocation();
+                if(tip.getParent() != null){
+                    ((ViewGroup)tip.getParent()).removeView(tip);
+                }
+                //tip must be wrap_content or determinate
+                int spec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+                tip.measure(spec, spec);
+                final int tipMeaWidth = tip.getMeasuredWidth();
+                final int tipMeaHeight = tip.getMeasuredHeight();
+                //offset
+                final int offSet = rp.getOffSet(anchor.getWidth(), anchor.getHeight(), tipMeaWidth, tipMeaHeight);
+                mlp = new FrameLayout.MarginLayoutParams(tipMeaWidth, tipMeaHeight);
+                switch (rp.align) {
+                    case ALIGN_TOP:
+                        mlp.topMargin = y - rp.margin - tipMeaHeight;
+                        mlp.leftMargin = anchorCenterX - tipMeaWidth / 2 - offSet;
+                        break;
+
+                    case ALIGN_LEFT:
+                        mlp.topMargin = anchorCenterY - tipMeaHeight / 2 - offSet;
+                        mlp.leftMargin = x - rp.margin - tipMeaWidth;
+                        break;
+
+                    case ALIGN_RIGHT:
+                        mlp.topMargin = anchorCenterY - tipMeaHeight / 2 - offSet;
+                        mlp.leftMargin = x + anchor.getWidth() + rp.margin;
+                        break;
+
+                    case ALIGN_BOTTOM:
+                        mlp.leftMargin = anchorCenterX - tipMeaWidth / 2 - offSet;
+                        mlp.topMargin = y + anchor.getHeight() + rp.margin;
+                        break;
+
+                    default:
+                        throw new UnsupportedOperationException();
+                }
+                vg.addView(tip, mlp);
+                tip.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        if (!mCallback.handleClickTip(v)) {
+                            dismiss();
+                        }
+                    }
+                });
+            }
+           //listeners
             vg.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     if(!mCallback.handleClickRoot(v)){
-                        dismiss();
-                    }
-                }
-            });
-            tip.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    if(!mCallback.handleClickTip(v)){
                         dismiss();
                     }
                 }
