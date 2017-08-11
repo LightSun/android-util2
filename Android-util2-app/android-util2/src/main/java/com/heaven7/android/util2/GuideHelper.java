@@ -82,6 +82,14 @@ public final class GuideHelper {
         }
 
         /**
+         * called on bind data for anchor view.
+         * @param copyOfAnchor the copy of anchor view
+         */
+        public void onBindData(View copyOfAnchor) {
+
+        }
+
+        /**
          * called on show the guide
          */
         public void onShow() {
@@ -470,6 +478,7 @@ public final class GuideHelper {
                     throw new UnsupportedOperationException();
             }
             vg.addView(tip, mlp);
+            mCallback.onBindData(copy);
             vg.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     if(!mCallback.handleClickRoot(v)){
