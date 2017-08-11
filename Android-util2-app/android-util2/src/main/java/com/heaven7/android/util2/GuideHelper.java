@@ -53,6 +53,7 @@ public final class GuideHelper {
 
     /**
      * the guide callback.
+     * @since 1.0.4
      */
     public static abstract class GuideCallback{
 
@@ -84,6 +85,7 @@ public final class GuideHelper {
         /**
          * called on bind data for anchor view.
          * @param copyOfAnchor the copy of anchor view
+         * @since 1.0.5
          */
         public void onBindData(View copyOfAnchor) {
 
@@ -222,6 +224,7 @@ public final class GuideHelper {
 
     /**
      * the guide component
+     * @since 1.0.4
      */
     public static class GuideComponent {
         /**
@@ -318,6 +321,7 @@ public final class GuideHelper {
 
     /**
      * the relative location.
+     * @since 1.0.4
      */
     public static class RelativeLocation {
         final byte align;
