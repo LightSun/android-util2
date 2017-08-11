@@ -5,7 +5,7 @@ this a second util lib of  android.
 # Gradle config
 
 ```java
-  compile 'com.heaven7.android.util2:android-util2:1.0.1'
+  compile 'com.heaven7.android.util2:android-util2:1.0.4'
 ```
 
 # sample 
