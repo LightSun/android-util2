@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:fitsSystemWindows="true">
+
+    <ToggleButton
+        android:id="@+id/test_tb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn=""
+        android:textOff=""
+        android:background="#1bc47e"
+        android:disabledAlpha="125"
+        android:checked="true"
+        />
+
+    <TextView
+        android:id="@+id/test_tv_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_round_green_20dp"
+        android:padding="5dp"
+        android:textSize="15sp"
+        android:textColor="@android:color/white"
+        android:text="guide test"
+        />
+
+</LinearLayout>

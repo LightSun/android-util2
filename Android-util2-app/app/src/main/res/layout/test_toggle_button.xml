@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:fitsSystemWindows="true">
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/sc"
+        style="@style/switch_common"
+        android:layout_marginTop="20dp"
+        />
+    <android.support.v7.widget.SwitchCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:switchMinWidth="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        />
+
+    <ToggleButton
+        android:id="@+id/tb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textOn=""
+        android:textOff=""
+        android:background="#1bc47e"
+        android:disabledAlpha="125"
+        android:checked="true"
+        />
+
+</LinearLayout>

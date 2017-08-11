@@ -6,4 +6,15 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="switch_common">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textOn">""</item>
+        <item name="android:textOff">""</item>
+        <item name="android:track">@drawable/selector_switch_track</item>
+        <item name="android:thumb">@drawable/selector_switch_thumb</item>
+        <item name="android:checked">true</item>
+    </style>
+
 </resources>
