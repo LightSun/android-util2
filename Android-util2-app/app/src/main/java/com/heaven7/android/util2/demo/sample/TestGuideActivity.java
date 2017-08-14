@@ -51,7 +51,7 @@ public class TestGuideActivity extends BaseActivity {
         mIndex ++ ;
         final GuideHelper.GuideComponent gc = new GuideHelper.GuideComponent.Builder()
                 .anchor(mTb_1)
-                .tip(mTip)
+                //.tip(mTip)
                 .location(new GuideHelper.RelativeLocation(
                         (byte) ((mIndex % 4) + 1), 40,
                         GuideHelper.RELATIVE_ANCHOR, 0.5f))
