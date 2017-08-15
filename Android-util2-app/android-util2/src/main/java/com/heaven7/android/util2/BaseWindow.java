@@ -19,9 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import com.heaven7.android.component.toast.AppToastComponent;
 import com.heaven7.core.util.WeakHandler;
 import com.heaven7.java.base.anno.IntDef;
 import com.heaven7.java.base.util.Throwables;
+import com.heaven7.android.component.toast.IWindow;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -31,7 +33,7 @@ import java.lang.annotation.RetentionPolicy;
  * Note: you must call {@linkplain #cancel()} before activity destroy.
  * Created by heaven7
  */
-public abstract class BaseWindow implements IWindow {
+public abstract class BaseWindow implements IWindow, AppToastComponent{
 
     private static final byte MSG_SHOW   = 2;
     private static final byte MSG_CANCEL = 4;

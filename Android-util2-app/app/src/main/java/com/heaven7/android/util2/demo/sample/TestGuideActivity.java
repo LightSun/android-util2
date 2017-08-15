@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.heaven7.android.component.guide.AppGuideComponent;
+import com.heaven7.android.component.guide.GuideComponent;
+import com.heaven7.android.component.guide.RelativeLocation;
 import com.heaven7.android.util2.GuideHelper;
 import com.heaven7.android.util2.demo.BaseActivity;
 import com.heaven7.android.util2.demo.R;
@@ -27,7 +30,7 @@ public class TestGuideActivity extends BaseActivity {
     @BindView(R.id.tb)
     ToggleButton mTb_1;
 
-    private GuideHelper mGH;
+    private AppGuideComponent mGH;
     private TextView mTip;
     private byte mIndex = -1;
 
@@ -49,10 +52,10 @@ public class TestGuideActivity extends BaseActivity {
 
     private void showTip() {
         mIndex ++ ;
-        final GuideHelper.GuideComponent gc = new GuideHelper.GuideComponent.Builder()
+        final GuideComponent gc = new GuideComponent.Builder()
                 .anchor(mTb_1)
                 //.tip(mTip)
-                .location(new GuideHelper.RelativeLocation(
+                .location(new RelativeLocation(
                         (byte) ((mIndex % 4) + 1), 40,
                         GuideHelper.RELATIVE_ANCHOR, 0.5f))
                 .build();
@@ -66,7 +69,7 @@ public class TestGuideActivity extends BaseActivity {
         MainWorker.postDelay(20, new Runnable() {
             @Override
             public void run() {
-                mGH.show(ArrayUtils.toArray(gc), new GuideHelper.GuideCallback() {
+                mGH.show(ArrayUtils.toArray(gc), new AppGuideComponent.GuideCallback() {
                     @Override
                     public boolean handleClickRoot(View root) {
                         Logger.i("TestUiActivity","handleClickRoot","");
