@@ -21,6 +21,8 @@ import butterknife.ButterKnife;
 
 public abstract class BaseActivity extends AppCompatActivity implements AppComponentContext{
 
+    private SimpleToast mToast;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +63,10 @@ public abstract class BaseActivity extends AppCompatActivity implements AppCompo
     }
 
     public final SimpleToast getToastWindow(){
-        return SimpleToast.create(this);
+        if(mToast == null){
+            mToast = SimpleToast.create(this);
+        }
+        return mToast;
     }
 
     //========================= end impl ===================================

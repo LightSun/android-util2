@@ -160,11 +160,21 @@ public abstract class BaseWindow implements IWindow, AppToastComponent{
     public IWindow enableClick(boolean enable) {
         if (enable) {
             mUsingConfig.wlp.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+            ViewUtil.obtainFocus(mWindowView);
         } else {
             mUsingConfig.wlp.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
         }
+        return this;
+    }
+
+    @Override
+    public IWindow setOnKeyListener(View.OnKeyListener l) {
+        if(mWindowView == null){
+            throw new IllegalStateException("you must call #layout(...) first!");
+        }
+        mWindowView.setOnKeyListener(l);
         return this;
     }
 

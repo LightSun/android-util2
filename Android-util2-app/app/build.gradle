@@ -8,7 +8,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.classroom100.android"
+        applicationId "com.heaven7.android.util2.demo"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1

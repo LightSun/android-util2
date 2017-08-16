@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 106
-        versionName "1.0.6"
+        versionCode 107
+        versionName "1.0.7"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -36,7 +36,7 @@ dependencies {
     compile 'com.heaven7.core.adapter:adapter:1.8.5' // 1.8.8
     compile 'com.heaven7.java.base:Java-base:1.0.9'
     compile 'com.heaven7.core.util:util-v1:1.1.2'
-    compile 'com.heaven7.android.component:android-app-components:1.0'
+    compile 'com.heaven7.android.component:android-app-components:1.0.3'
 }
 
 ext {
@@ -54,7 +54,7 @@ ext {
     gitUrl = siteUrl + '.git'
     githubRepository= 'LightSun/android-util2'
 
-    libraryVersion = '1.0.6'
+    libraryVersion = '1.0.7'
 
     developerId = 'heaven7'
     developerName = 'heaven7'
