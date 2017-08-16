@@ -27,7 +27,7 @@ public class ToastTestActivity extends BaseActivity implements View.OnKeyListene
 
     @Override
     public void onInitialize(Context context, @Nullable Bundle savedInstanceState) {
-       getToastWindow().enableClick(true);
+        getToastWindow().enableClick(true);
         getToastWindow().setOnKeyListener(this);
     }
 
@@ -79,7 +79,7 @@ public class ToastTestActivity extends BaseActivity implements View.OnKeyListene
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-        Logger.i("ToastTestActivity","onKey","");
+        Logger.i("ToastTestActivity","onKey","" + event);
         return false;
     }
 }

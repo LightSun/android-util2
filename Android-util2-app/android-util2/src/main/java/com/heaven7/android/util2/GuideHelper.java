@@ -55,10 +55,15 @@ public class GuideHelper implements AppGuideComponent {
         config.wlp = wlp;
         config.duration = IWindow.WindowConfig.DURATION_INFINITE;
 
-        mWindow.setDefaultWindowConfig(config);
+        mWindow.setDefaultWindowConfig(config).reset();
         mWindow.layout(getGuideLayoutId(), null, null);
     }
 
+    /**
+     * align type to string. often used for log.
+     * @param align the align type
+     * @return a string of align.
+     */
     public static String alignToString(byte align) {
         switch (align) {
             case ALIGN_BOTTOM:
@@ -132,9 +137,10 @@ public class GuideHelper implements AppGuideComponent {
     @Override
     public void setOnKeyListener(View.OnKeyListener l) {
         if (l != null) {
+            //this window default is clickable. so needn't reset
             ViewUtil.obtainFocus(mWindow.getWindowView());
         }
-        mWindow.getWindowView().setOnKeyListener(l);
+        mWindow.setOnKeyListener(l);
     }
 
     /**
