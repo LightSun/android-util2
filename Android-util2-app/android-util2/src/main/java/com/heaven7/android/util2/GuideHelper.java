@@ -21,10 +21,11 @@ import static com.heaven7.android.util2.ViewUtil.getStatusHeight;
 /**
  * the class help we handle the guide.
  * Created by heaven7 on 2017/8/9 0009.
+ *
  * @since 1.0.6
  */
 
-public class GuideHelper implements AppGuideComponent{
+public class GuideHelper implements AppGuideComponent {
 
     private final AndroidSmartReference<Activity> mAsr_activity;
     private final InternalWindow mWindow;
@@ -35,7 +36,8 @@ public class GuideHelper implements AppGuideComponent{
 
     /**
      * create the guide helper.
-     * @param context the activity.
+     *
+     * @param context  the activity.
      * @param layoutId the layout id of activity.
      */
     public GuideHelper(Activity context, @LayoutRes int layoutId) {
@@ -74,7 +76,8 @@ public class GuideHelper implements AppGuideComponent{
 
     /**
      * show the guide for target components.
-     * @param gc the guide component
+     *
+     * @param gc       the guide component
      * @param callback the guide callback.
      */
     @Override
@@ -84,7 +87,8 @@ public class GuideHelper implements AppGuideComponent{
 
     /**
      * show the guide for target components.
-     * @param gcs the guide components
+     *
+     * @param gcs      the guide components
      * @param callback the guide callback.
      */
     @Override
@@ -106,26 +110,41 @@ public class GuideHelper implements AppGuideComponent{
     /**
      * cancel the guide and will not notify callback of dismiss.
      * this method is unlike the {@linkplain #dismiss()}.
+     *
      * @see #dismiss()
      */
     @Override
-    public void cancel(){
+    public void cancel() {
         dismissInternal(false);
     }
+
     /**
      * dismiss the guide window and notify dismiss if need.
      * this method is unlike the {@linkplain #cancel()} ()}.
+     *
      * @see #cancel()
      */
     @Override
     public void dismiss() {
         dismissInternal(true);
     }
+
+    @Override
+    public void setOnKeyListener(View.OnKeyListener l) {
+        if (l != null) {
+            ViewUtil.obtainFocus(mWindow.getWindowView());
+        }
+        mWindow.getWindowView().setOnKeyListener(l);
+    }
+
     /**
      * get the guide layout id  which will be used as root view
+     *
      * @return the guide layout id.
      */
-    protected @LayoutRes int getGuideLayoutId(){
+    protected
+    @LayoutRes
+    int getGuideLayoutId() {
         return R.layout.heaven7_view_guide_mask;
     }
 
@@ -134,7 +153,7 @@ public class GuideHelper implements AppGuideComponent{
     private void dismissInternal(boolean callback) {
         mWindow.cancel();
         clearChildren();
-        if(callback && mCallback != null) {
+        if (callback && mCallback != null) {
             mCallback.onDismiss();
         }
         mCallback = null;
@@ -145,7 +164,7 @@ public class GuideHelper implements AppGuideComponent{
         vg.removeAllViews();
     }
 
-    private class GuideViewBinder implements IWindow.IViewBinder{
+    private class GuideViewBinder implements IWindow.IViewBinder {
 
         final GuideComponent[] mGcs;
         final boolean mFullScreen;
@@ -161,14 +180,14 @@ public class GuideHelper implements AppGuideComponent{
         public void onBind(View view) {
             //use AsyncInflater may cause some problem
             View root = LayoutInflater.from(view.getContext()).inflate(mLayoutId, null);
-            if(mAsr_activity.get() != null) {
+            if (mAsr_activity.get() != null) {
                 for (GuideComponent component : mGcs) {
                     bindImpl(root, component);
                 }
             }
         }
 
-        private void bindImpl(View root, GuideComponent component){
+        private void bindImpl(View root, GuideComponent component) {
             final View copy = root.findViewById(component.getAnchorViewId());
             ((ViewGroup) copy.getParent()).removeView(copy);
 
@@ -190,10 +209,10 @@ public class GuideHelper implements AppGuideComponent{
             mCallback.onBindData(copy);
             //tip may be null.
             final View tip = component.getTip();
-            if(tip != null) {
+            if (tip != null) {
                 final RelativeLocation rp = component.getRelativeLocation();
-                if(tip.getParent() != null){
-                    ((ViewGroup)tip.getParent()).removeView(tip);
+                if (tip.getParent() != null) {
+                    ((ViewGroup) tip.getParent()).removeView(tip);
                 }
                 //tip must be wrap_content or determinate
                 int spec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
@@ -236,17 +255,17 @@ public class GuideHelper implements AppGuideComponent{
                     }
                 });
             }
-           //listeners
+            //listeners
             vg.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    if(!mCallback.handleClickRoot(v)){
+                    if (!mCallback.handleClickRoot(v)) {
                         dismiss();
                     }
                 }
             });
             copy.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    if(!mCallback.handleClickAnchor(v)){
+                    if (!mCallback.handleClickAnchor(v)) {
                         dismiss();
                     }
                 }
