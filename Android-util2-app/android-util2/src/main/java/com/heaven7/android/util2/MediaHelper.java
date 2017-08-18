@@ -42,6 +42,15 @@ public class MediaHelper {
      * @param url the target url.
      */
     public void switchPlay(String url){
+        switchPlay(url, 0);
+    }
+    /**
+     * switch to pause or resume play or start play.
+     * @param url the target url.
+     * @param position the expect position
+     * @since 1.0.9
+     */
+    public void switchPlay(String url, int position){
         if(mPlayer == null){
             Logger.w("MediaHelper","switchPlay","player == null");
             return;
@@ -60,7 +69,7 @@ public class MediaHelper {
                 break;
 
             case STATE_NOT_START:
-                startPlay(url);
+                startPlay(url, position);
                 break;
 
             default:
