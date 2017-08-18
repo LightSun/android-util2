@@ -2,8 +2,12 @@ package com.heaven7.android.util2;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 /**
@@ -11,8 +15,30 @@ import android.view.WindowManager;
  * Created by heaven7 on 2016/10/27.
  *
  * @since 1.0.3
+ * @version 1.0.3
  */
 public final class ViewUtil {
+
+
+    /**
+     * measure width and height for view which indicating by layout id.
+     * @param context the context
+     * @param layoutId the layout id
+     * @param parent the parent view.
+     * @return the display width and height.
+     * @since 1.0.9
+     */
+    public static DisplayMetrics measureView(Context context, @LayoutRes int layoutId,
+                                             @Nullable ViewGroup parent){
+        DisplayMetrics dm = new DisplayMetrics();
+        View item = LayoutInflater.from(context).inflate(layoutId,
+                parent, false);
+        int spec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        item.measure(spec, spec);
+        dm.heightPixels = item.getMeasuredHeight();
+        dm.widthPixels = item.getMeasuredWidth();
+        return dm;
+    }
 
     /**
      * get the state bar height.
