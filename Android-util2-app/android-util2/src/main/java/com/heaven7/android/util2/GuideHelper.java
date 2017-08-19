@@ -12,7 +12,6 @@ import android.widget.FrameLayout;
 import com.heaven7.android.component.guide.AppGuideComponent;
 import com.heaven7.android.component.guide.GuideComponent;
 import com.heaven7.android.component.guide.RelativeLocation;
-import com.heaven7.core.util.Logger;
 import com.heaven7.java.base.util.ArrayUtils;
 import com.heaven7.java.base.util.Throwables;
 
@@ -51,9 +50,10 @@ public class GuideHelper implements AppGuideComponent {
         wlp.height = WindowManager.LayoutParams.MATCH_PARENT;
         wlp.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
 
-        IWindow.WindowConfig config = new IWindow.WindowConfig();
+        com.heaven7.android.component.toast.IWindow.WindowConfig config = new
+                com.heaven7.android.component.toast.IWindow.WindowConfig();
         config.wlp = wlp;
-        config.duration = IWindow.WindowConfig.DURATION_INFINITE;
+        config.duration = com.heaven7.android.component.toast.IWindow.WindowConfig.DURATION_INFINITE;
 
         mWindow.setDefaultWindowConfig(config).reset();
         mWindow.layout(getGuideLayoutId(), null, null);
