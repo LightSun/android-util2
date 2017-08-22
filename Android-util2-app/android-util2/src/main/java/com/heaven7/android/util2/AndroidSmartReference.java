@@ -2,6 +2,7 @@ package com.heaven7.android.util2;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Build;
 import android.view.View;
 
@@ -29,7 +30,7 @@ public class AndroidSmartReference<T> extends SmartReference<T> {
 
     @Override
     protected boolean shouldWeakReference(T t) {
-        return t instanceof Activity || t instanceof View
+        return t instanceof Context || t instanceof View
                 || t instanceof Fragment
                 || t instanceof android.support.v4.app.Fragment;
     }
