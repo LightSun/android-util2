@@ -33,8 +33,25 @@ public class MediaHelper {
         mPlayer.setOnErrorListener(mCallback);
     }
 
+    /**
+     * get media player.
+     * @return the media player.
+     */
     public MediaPlayer getMediaPlayer(){
         return mPlayer;
+    }
+
+    /**
+     * Checks whether the MediaPlayer is playing.
+     *
+     * @return true if currently playing, false otherwise
+     * @throws IllegalStateException if the internal player engine has not been
+     * initialized or has been released.
+     * @see MediaPlayer#isPlaying()
+     * @since 1.1.1
+     */
+    public boolean isPlaying(){
+        return getMediaPlayer().isPlaying();
     }
 
     /**
