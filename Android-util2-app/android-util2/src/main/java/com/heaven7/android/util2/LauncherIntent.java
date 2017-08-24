@@ -1,5 +1,6 @@
 package com.heaven7.android.util2;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -128,7 +129,7 @@ public class LauncherIntent extends Intent {
     public void startActivityForResult(final int requestCode) {
         act(new IntentActionActor() {
             @Override
-            boolean verify(@NonNull Context context) {
+            public boolean verify(@NonNull Context context) {
                 return context instanceof Activity;
             }
             @Override
@@ -139,6 +140,29 @@ public class LauncherIntent extends Intent {
         });
     }
 
+    /**
+     * start activity for result by this intent and target request code.
+     * @param requestCode the request code
+     * @param options Additional options for how the Activity should be started.
+     * See {@link android.content.Context#startActivity(Intent, Bundle)
+     * Context.startActivity(Intent, Bundle)} for more details.
+     * @see Activity#startActivityForResult(Intent, int, Bundle)
+     * @since 1.1.1
+     */
+    public void startActivityForResult(final int requestCode, final @Nullable Bundle options) {
+        act(new IntentActionActor() {
+            @Override
+            public boolean verify(@NonNull Context context) {
+                return context instanceof Activity && Build.VERSION.SDK_INT >= 16;
+            }
+            @TargetApi(16)
+            @Override
+            public boolean act(Context context, Intent intent) {
+                ((Activity) context).startActivityForResult(intent, requestCode, options);
+                return true;
+            }
+        });
+    }
     /**
      * start activity with options.
      * @param options Additional options for how the Activity should be started.
@@ -151,7 +175,7 @@ public class LauncherIntent extends Intent {
     public void startActivity(@Nullable final Bundle options) {
         act(new IntentActionActor() {
             @Override
-            boolean verify(@NonNull Context context) {
+            public boolean verify(@NonNull Context context) {
                 return options == null || Build.VERSION.SDK_INT >= 16;
             }
 
@@ -267,7 +291,7 @@ public class LauncherIntent extends Intent {
          * @param context the context
          * @return true if verify success.
          */
-        boolean verify(@NonNull Context context){
+        public boolean verify(@NonNull Context context){
             return true;
         }
 
