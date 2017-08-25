@@ -5,12 +5,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.ArraySet;
 
 import com.heaven7.core.util.Logger;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * a class named launcher intent help we fast handle . start/launch activity/service/broadcast.
@@ -280,6 +286,119 @@ public class LauncherIntent extends Intent {
     private IntentActionCallback getCallback() {
         return mRefCallback != null ? mRefCallback.get() : null;
     }
+
+    //========================= override super(since 1.1.1) ===========================
+    @Override
+    public LauncherIntent addCategory(String category) {
+        return (LauncherIntent) super.addCategory(category);
+    }
+    @Override
+    public LauncherIntent setFlags(int flags) {
+        return (LauncherIntent) super.setFlags(flags);
+    }
+    @Override
+    public LauncherIntent addFlags(int flags) {
+        return (LauncherIntent) super.addFlags(flags);
+    }
+    @Override
+    public LauncherIntent setPackage(String packageName) {
+        return (LauncherIntent) super.setPackage(packageName);
+    }
+    @Override
+    public LauncherIntent setType(String type) {
+        return (LauncherIntent) super.setType(type);
+    }
+
+    @TargetApi(16)
+    @Override
+    public LauncherIntent setDataAndTypeAndNormalize(Uri data, String type) {
+        if(Build.VERSION.SDK_INT < 16){
+            return this;
+        }
+        return (LauncherIntent) super.setDataAndType(data.normalizeScheme(), normalizeMimeType(type));
+    }
+    @Override
+    public LauncherIntent setDataAndType(Uri data, String type) {
+        return (LauncherIntent) super.setDataAndType(data, type);
+    }
+    @Override
+    public LauncherIntent setData(Uri data) {
+        return (LauncherIntent) super.setData(data);
+    }
+
+    @Override
+    public LauncherIntent putCharSequenceArrayListExtra(String name, ArrayList<CharSequence> value) {
+        return (LauncherIntent) super.putCharSequenceArrayListExtra(name, value);
+    }
+
+    @Override
+    public LauncherIntent putExtra(String name, Serializable value) {
+        return (LauncherIntent) super.putExtra(name, value);
+    }
+
+    @Override
+    public LauncherIntent putExtra(String name, boolean[] value) {
+        return (LauncherIntent) super.putExtra(name, value);
+    }
+    @Override
+    public LauncherIntent putExtra(String name, byte[] value) {
+        return (LauncherIntent) super.putExtra(name, value);
+    }
+    @Override
+    public LauncherIntent putExtra(String name, short[] value) {
+        return (LauncherIntent) super.putExtra(name, value);
+    }
+
+    @Override
+    public LauncherIntent putExtra(String name, char[] value) {
+        return (LauncherIntent) super.putExtra(name, value);
+    }
+
+    @Override
+    public LauncherIntent putExtra(String name, int[] value) {
+        return (LauncherIntent) super.putExtra(name, value);
+    }
+
+    @Override
+    public LauncherIntent putExtra(String name, long[] value) {
+        return (LauncherIntent) super.putExtra(name, value);
+    }
+
+    @Override
+    public LauncherIntent putExtra(String name, float[] value) {
+        return (LauncherIntent) super.putExtra(name, value);
+    }
+    @Override
+    public LauncherIntent putExtra(String name, double[] value) {
+        return (LauncherIntent) super.putExtra(name, value);
+    }
+
+    @Override
+    public LauncherIntent putExtra(String name, String[] value) {
+        return (LauncherIntent) super.putExtra(name, value);
+    }
+
+    @Override
+    public LauncherIntent putExtra(String name, CharSequence[] value) {
+        return (LauncherIntent) super.putExtra(name, value);
+    }
+
+    @Override
+    public LauncherIntent putExtra(String name, Bundle value) {
+        return (LauncherIntent) super.putExtra(name, value);
+    }
+
+    @Override
+    public LauncherIntent putExtras(Intent src) {
+        return (LauncherIntent) super.putExtras(src);
+    }
+
+    @Override
+    public LauncherIntent putExtras(Bundle extras) {
+        return (LauncherIntent) super.putExtras(extras);
+    }
+
+    //====================================================
 
     /**
      * the intent action actor
