@@ -31,7 +31,7 @@ public class ReceiverHelper {
 
     public void register(){
         Throwables.checkNull(mCallback);
-        if(mReceiver != null) {
+        if(mReceiver == null) {
             mReceiver = new InternalReceiver();
             mContext.registerReceiver(mReceiver, mCallback.buildIntentFilter(mContext));
         }
