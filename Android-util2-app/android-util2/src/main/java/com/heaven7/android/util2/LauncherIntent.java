@@ -25,7 +25,7 @@ import java.util.ArrayList;
  */
 public class LauncherIntent extends Intent {
 
-    private final WeakContextOwner mWeakContext;
+    private WeakContextOwner mWeakContext;
     private AndroidSmartReference<IntentActionCallback> mRefCallback;
 
     /**
@@ -37,6 +37,13 @@ public class LauncherIntent extends Intent {
         super(context, targetClass);
         this.mWeakContext = new WeakContextOwner(context);
     }
+
+    /**
+     * @since 1.1.1
+     */
+    protected LauncherIntent(){
+        super();
+    }
     /**
      * create the launcher intent by context and target class .
      * @param context the context
@@ -45,6 +52,26 @@ public class LauncherIntent extends Intent {
      */
     public static LauncherIntent create(Context context, Class<?> targetClass){
         return new LauncherIntent(context, targetClass);
+    }
+    /**
+     * create the launcher intent by context.
+     * @param context the context
+     * @return the launcher intent.
+     * @since 1.1.1
+     */
+    public static LauncherIntent create(Context context){
+        return new LauncherIntent().setContext(context);
+    }
+
+    /**
+     * set context. if you only need context(without explicit target class). just use this.
+     * @param context the context.
+     * @return this.
+     * @since 1.1.1
+     */
+    public LauncherIntent setContext(Context context){
+        this.mWeakContext = new WeakContextOwner(context);
+        return this;
     }
 
     /**
@@ -281,13 +308,26 @@ public class LauncherIntent extends Intent {
     }
 
     private Context getContext() {
-        return mWeakContext.getContext();
+        return mWeakContext != null ? mWeakContext.getContext() : null;
     }
     private IntentActionCallback getCallback() {
         return mRefCallback != null ? mRefCallback.get() : null;
     }
 
     //========================= override super(since 1.1.1) ===========================
+
+    @Override
+    public LauncherIntent setClass(Context packageContext, Class<?> cls) {
+        this.mWeakContext = new WeakContextOwner(packageContext);
+        return (LauncherIntent) super.setClass(packageContext, cls);
+    }
+
+    @Override
+    public LauncherIntent setClassName(Context packageContext, String className) {
+        this.mWeakContext = new WeakContextOwner(packageContext);
+        return (LauncherIntent) super.setClassName(packageContext, className);
+    }
+
     @Override
     public LauncherIntent addCategory(String category) {
         return (LauncherIntent) super.addCategory(category);
