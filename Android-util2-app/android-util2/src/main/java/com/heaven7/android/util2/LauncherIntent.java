@@ -504,6 +504,192 @@ public class LauncherIntent extends Intent {
             mIntent.putExtras(extras);
             return this;
         }
+        public LauncherIntent build(){
+            return mIntent;
+        }
+
+        //========================= start new methods===============
+        /**
+         * Add extended data to the intent.  The name must include a package
+         * prefix, for example the app com.android.contacts would use names
+         * like "com.android.contacts.ShowAll".
+         *
+         * @param name The name of the extra data, with package prefix.
+         * @param value The String data value.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #putExtras
+         * @see #removeExtra
+         * @see #getStringExtra(String)
+         * @since 1.1.3
+         */
+        public Builder putExtra(String name, String value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+        /**
+         * Add extended data to the intent.  The name must include a package
+         * prefix, for example the app com.android.contacts would use names
+         * like "com.android.contacts.ShowAll".
+         *
+         * @param name The name of the extra data, with package prefix.
+         * @param value The integer data value.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #putExtras
+         * @see #removeExtra
+         * @see #getIntExtra(String, int)
+         * @since 1.1.3
+         */
+        public Builder putExtra(String name, int value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+        /**
+         * Add extended data to the intent.  The name must include a package
+         * prefix, for example the app com.android.contacts would use names
+         * like "com.android.contacts.ShowAll".
+         *
+         * @param name The name of the extra data, with package prefix.
+         * @param value The long data value.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #putExtras
+         * @see #removeExtra
+         * @see #getLongExtra(String, long)
+         * @since 1.1.3
+         */
+        public Builder putExtra(String name, long value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+        /**
+         * Add extended data to the intent.  The name must include a package
+         * prefix, for example the app com.android.contacts would use names
+         * like "com.android.contacts.ShowAll".
+         *
+         * @param name The name of the extra data, with package prefix.
+         * @param value The float data value.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #putExtras
+         * @see #removeExtra
+         * @see #getFloatExtra(String, float)
+         * @since 1.1.3
+         */
+        public Builder putExtra(String name, float value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+        /**
+         * Add extended data to the intent.  The name must include a package
+         * prefix, for example the app com.android.contacts would use names
+         * like "com.android.contacts.ShowAll".
+         *
+         * @param name The name of the extra data, with package prefix.
+         * @param value The double data value.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #putExtras
+         * @see #removeExtra
+         * @see #getDoubleExtra(String, double)
+         * @since 1.1.3
+         */
+        public Builder putExtra(String name, double value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+        /**
+         * Add extended data to the intent.  The name must include a package
+         * prefix, for example the app com.android.contacts would use names
+         * like "com.android.contacts.ShowAll".
+         *
+         * @param name The name of the extra data, with package prefix.
+         * @param value The char data value.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #putExtras
+         * @see #removeExtra
+         * @see #getCharExtra(String, char)
+         * @since 1.1.3
+         */
+        public Builder putExtra(String name, char value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+        /**
+         * Add extended data to the intent.  The name must include a package
+         * prefix, for example the app com.android.contacts would use names
+         * like "com.android.contacts.ShowAll".
+         *
+         * @param name The name of the extra data, with package prefix.
+         * @param value The short data value.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #putExtras
+         * @see #removeExtra
+         * @see #getShortExtra(String, short)
+         * @since 1.1.3
+         */
+        public Builder putExtra(String name, short value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+        /**
+         * Add extended data to the intent.  The name must include a package
+         * prefix, for example the app com.android.contacts would use names
+         * like "com.android.contacts.ShowAll".
+         *
+         * @param name The name of the extra data, with package prefix.
+         * @param value The byte data value.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #putExtras
+         * @see #removeExtra
+         * @see #getByteExtra(String, byte)
+         * @since 1.1.3
+         */
+        public Builder putExtra(String name, byte value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+
+        /**
+         * Add extended data to the intent.  The name must include a package
+         * prefix, for example the app com.android.contacts would use names
+         * like "com.android.contacts.ShowAll".
+         *
+         * @param name The name of the extra data, with package prefix.
+         * @param value The boolean data value.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #putExtras
+         * @see #removeExtra
+         * @see #getBooleanExtra(String, boolean)
+         * @since 1.1.3
+         */
+        public Builder putExtra(String name, boolean value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
         /**
          * Add extended data to the intent.  The name must include a package
          * prefix, for example the app com.android.contacts would use names
@@ -606,9 +792,6 @@ public class LauncherIntent extends Intent {
         public Builder putStringArrayListExtra(String name, ArrayList<String> value) {
             mIntent.putStringArrayListExtra(name, value);
             return this;
-        }
-        public LauncherIntent build(){
-            return mIntent;
         }
     }
 
