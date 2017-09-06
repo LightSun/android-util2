@@ -2,6 +2,7 @@ package com.heaven7.android.util2;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -314,129 +315,199 @@ public class LauncherIntent extends Intent {
         return mRefCallback != null ? mRefCallback.get() : null;
     }
 
-    //========================= override super(since 1.1.1) ===========================
+    /**
+     * the launcher intent builder.
+     * almost all method from {@linkplain Intent}.
+     * @since 1.1.2
+     */
+    public static class Builder{
 
-    @Override
-    public LauncherIntent setClass(Context packageContext, Class<?> cls) {
-        this.mWeakContext = new WeakContextOwner(packageContext);
-        return (LauncherIntent) super.setClass(packageContext, cls);
-    }
+        private final LauncherIntent mIntent = new LauncherIntent();
 
-    @Override
-    public LauncherIntent setClassName(Context packageContext, String className) {
-        this.mWeakContext = new WeakContextOwner(packageContext);
-        return (LauncherIntent) super.setClassName(packageContext, className);
-    }
-
-    @Override
-    public LauncherIntent addCategory(String category) {
-        return (LauncherIntent) super.addCategory(category);
-    }
-    @Override
-    public LauncherIntent setFlags(int flags) {
-        return (LauncherIntent) super.setFlags(flags);
-    }
-    @Override
-    public LauncherIntent addFlags(int flags) {
-        return (LauncherIntent) super.addFlags(flags);
-    }
-    @Override
-    public LauncherIntent setPackage(String packageName) {
-        return (LauncherIntent) super.setPackage(packageName);
-    }
-    @Override
-    public LauncherIntent setType(String type) {
-        return (LauncherIntent) super.setType(type);
-    }
-
-    @TargetApi(16)
-    @Override
-    public LauncherIntent setDataAndTypeAndNormalize(Uri data, String type) {
-        if(Build.VERSION.SDK_INT < 16){
+        /**
+         * set the context. this method often used for unknown target component(like service, receiver and etc.).
+         * @param context the context.
+         * @return this.
+         */
+        public Builder setContext(Context context){
+            mIntent.setContext(context);
             return this;
         }
-        return (LauncherIntent) super.setDataAndType(data.normalizeScheme(), normalizeMimeType(type));
-    }
-    @Override
-    public LauncherIntent setDataAndType(Uri data, String type) {
-        return (LauncherIntent) super.setDataAndType(data, type);
-    }
-    @Override
-    public LauncherIntent setData(Uri data) {
-        return (LauncherIntent) super.setData(data);
+
+        /**
+         * {@linkplain Intent#setClass(Context, Class)}
+         * @param packageContext the context
+         * @param cls The class name to set, equivalent to
+         *            <code>setClassName(context, cls.getName())</code>.
+         * @return this
+         */
+        public Builder setClass(Context packageContext, Class<?> cls) {
+            mIntent.setContext(packageContext);
+            mIntent.setClass(packageContext, cls);
+            return this;
+        }
+        /**
+         * {@linkplain Intent#setClassName(Context, String)} (Context, Class)}
+         * @param packageContext the context
+         * @param className The name of a class inside of the application package
+         *        that will be used as the component for this Intent.
+         * @return this
+         */
+        public Builder setClassName(Context packageContext, String className) {
+            mIntent.setContext(packageContext);
+            mIntent.setClassName(packageContext, className);
+            return this;
+        }
+
+        /**
+         *  Convenience for calling {@link #setComponent} with an
+         *  explicit application package name and class name.
+         *
+         * @param packageName The name of the package implementing the desired
+         * component.
+         * @param className The name of a class inside of the application package
+         * that will be used as the component for this Intent.
+         *
+         * @return this.
+         *
+         * @see #setComponent
+         * @see #setClass
+         */
+        public Builder setClassName(String packageName, String className) {
+            mIntent.setClassName(packageName, className);
+            return this;
+        }
+
+        /**
+         * Add a new category to the intent.  Categories provide additional detail
+         * about the action the intent performs.  When resolving an intent, only
+         * activities that provide <em>all</em> of the requested categories will be
+         * used.
+         *
+         * @param category The desired category.  This can be either one of the
+         *               predefined Intent categories, or a custom category in your own
+         *               namespace.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #hasCategory
+         * @see #removeCategory
+         */
+        public Builder addCategory(String category) {
+            mIntent.addCategory(category);
+            return this;
+        }
+        public Builder setFlags(int flags) {
+            mIntent.setFlags(flags);
+            return this;
+        }
+        public Builder addFlags(int flags) {
+            mIntent.addFlags(flags);
+            return this;
+        }
+        public Builder setPackage(String packageName) {
+            mIntent.setPackage(packageName);
+            return this;
+        }
+        public Builder setType(String type) {
+            mIntent.setType(type);
+            return this;
+        }
+
+        @TargetApi(16)
+        public Builder setDataAndTypeAndNormalize(Uri data, String type) {
+            if(Build.VERSION.SDK_INT < 16){
+                return this;
+            }
+            mIntent.setDataAndType(data.normalizeScheme(), normalizeMimeType(type));
+            return this;
+        }
+        public Builder setDataAndType(Uri data, String type) {
+            mIntent.setDataAndType(data, type);
+            return this;
+        }
+        public Builder setData(Uri data) {
+            mIntent.setData(data);
+            return this;
+        }
+
+        public Builder putCharSequenceArrayListExtra(String name, ArrayList<CharSequence> value) {
+            mIntent.putCharSequenceArrayListExtra(name, value);
+            return this;
+        }
+
+        public Builder putExtra(String name, Serializable value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+
+        public Builder putExtra(String name, boolean[] value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+        public Builder putExtra(String name, byte[] value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+        public Builder putExtra(String name, short[] value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+
+        public Builder putExtra(String name, char[] value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+
+        public Builder putExtra(String name, int[] value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+
+        public Builder putExtra(String name, long[] value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+
+        public Builder putExtra(String name, float[] value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+        public Builder putExtra(String name, double[] value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+
+        public Builder putExtra(String name, String[] value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+
+        public Builder putExtra(String name, CharSequence[] value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+
+        public Builder putExtra(String name, Bundle value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+
+        public Builder putExtras(Intent src) {
+            mIntent.putExtras(src);
+            return this;
+        }
+
+        public Builder putExtras(Bundle extras) {
+            mIntent.putExtras(extras);
+            return this;
+        }
+        public LauncherIntent build(){
+            return mIntent;
+        }
     }
 
-    @Override
-    public LauncherIntent putCharSequenceArrayListExtra(String name, ArrayList<CharSequence> value) {
-        return (LauncherIntent) super.putCharSequenceArrayListExtra(name, value);
-    }
-
-    @Override
-    public LauncherIntent putExtra(String name, Serializable value) {
-        return (LauncherIntent) super.putExtra(name, value);
-    }
-
-    @Override
-    public LauncherIntent putExtra(String name, boolean[] value) {
-        return (LauncherIntent) super.putExtra(name, value);
-    }
-    @Override
-    public LauncherIntent putExtra(String name, byte[] value) {
-        return (LauncherIntent) super.putExtra(name, value);
-    }
-    @Override
-    public LauncherIntent putExtra(String name, short[] value) {
-        return (LauncherIntent) super.putExtra(name, value);
-    }
-
-    @Override
-    public LauncherIntent putExtra(String name, char[] value) {
-        return (LauncherIntent) super.putExtra(name, value);
-    }
-
-    @Override
-    public LauncherIntent putExtra(String name, int[] value) {
-        return (LauncherIntent) super.putExtra(name, value);
-    }
-
-    @Override
-    public LauncherIntent putExtra(String name, long[] value) {
-        return (LauncherIntent) super.putExtra(name, value);
-    }
-
-    @Override
-    public LauncherIntent putExtra(String name, float[] value) {
-        return (LauncherIntent) super.putExtra(name, value);
-    }
-    @Override
-    public LauncherIntent putExtra(String name, double[] value) {
-        return (LauncherIntent) super.putExtra(name, value);
-    }
-
-    @Override
-    public LauncherIntent putExtra(String name, String[] value) {
-        return (LauncherIntent) super.putExtra(name, value);
-    }
-
-    @Override
-    public LauncherIntent putExtra(String name, CharSequence[] value) {
-        return (LauncherIntent) super.putExtra(name, value);
-    }
-
-    @Override
-    public LauncherIntent putExtra(String name, Bundle value) {
-        return (LauncherIntent) super.putExtra(name, value);
-    }
-
-    @Override
-    public LauncherIntent putExtras(Intent src) {
-        return (LauncherIntent) super.putExtras(src);
-    }
-
-    @Override
-    public LauncherIntent putExtras(Bundle extras) {
-        return (LauncherIntent) super.putExtras(extras);
-    }
 
     //====================================================
 
