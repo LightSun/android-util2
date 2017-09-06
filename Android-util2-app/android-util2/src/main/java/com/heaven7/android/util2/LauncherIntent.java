@@ -749,7 +749,7 @@ public class LauncherIntent extends Intent {
          * @since 1.1.3
          */
         public Builder putParcelableArrayListExtra(String name, ArrayList<? extends Parcelable> value) {
-            mIntent.putExtra(name, value);
+            mIntent.putParcelableArrayListExtra(name, value);
             return this;
         }
         /**
