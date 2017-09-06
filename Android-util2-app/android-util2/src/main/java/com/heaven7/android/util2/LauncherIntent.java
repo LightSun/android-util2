@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.ArraySet;
@@ -501,6 +502,109 @@ public class LauncherIntent extends Intent {
 
         public Builder putExtras(Bundle extras) {
             mIntent.putExtras(extras);
+            return this;
+        }
+        /**
+         * Add extended data to the intent.  The name must include a package
+         * prefix, for example the app com.android.contacts would use names
+         * like "com.android.contacts.ShowAll".
+         *
+         * @param name The name of the extra data, with package prefix.
+         * @param value The Parcelable data value.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #putExtras
+         * @see #removeExtra
+         * @see #getParcelableExtra(String)
+         * @since 1.1.3
+         */
+        public Builder putExtra(String name, Parcelable value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+
+        /**
+         * Add extended data to the intent.  The name must include a package
+         * prefix, for example the app com.android.contacts would use names
+         * like "com.android.contacts.ShowAll".
+         *
+         * @param name The name of the extra data, with package prefix.
+         * @param value The Parcelable[] data value.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #putExtras
+         * @see #removeExtra
+         * @see #getParcelableArrayExtra(String)
+         * @since 1.1.3
+         */
+        public Builder putExtra(String name, Parcelable[] value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+
+        /**
+         * Add extended data to the intent.  The name must include a package
+         * prefix, for example the app com.android.contacts would use names
+         * like "com.android.contacts.ShowAll".
+         *
+         * @param name The name of the extra data, with package prefix.
+         * @param value The ArrayList<Parcelable> data value.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #putExtras
+         * @see #removeExtra
+         * @see #getParcelableArrayListExtra(String)
+         * @since 1.1.3
+         */
+        public Builder putParcelableArrayListExtra(String name, ArrayList<? extends Parcelable> value) {
+            mIntent.putExtra(name, value);
+            return this;
+        }
+        /**
+         * Add extended data to the intent.  The name must include a package
+         * prefix, for example the app com.android.contacts would use names
+         * like "com.android.contacts.ShowAll".
+         *
+         * @param name The name of the extra data, with package prefix.
+         * @param value The ArrayList<Integer> data value.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #putExtras
+         * @see #removeExtra
+         * @see #getIntegerArrayListExtra(String)
+         * @since 1.1.3
+         */
+        public Builder putIntegerArrayListExtra(String name, ArrayList<Integer> value) {
+            mIntent.putIntegerArrayListExtra(name, value);
+            return this;
+        }
+
+        /**
+         * Add extended data to the intent.  The name must include a package
+         * prefix, for example the app com.android.contacts would use names
+         * like "com.android.contacts.ShowAll".
+         *
+         * @param name The name of the extra data, with package prefix.
+         * @param value The ArrayList<String> data value.
+         *
+         * @return Returns the same Intent object, for chaining multiple calls
+         * into a single statement.
+         *
+         * @see #putExtras
+         * @see #removeExtra
+         * @see #getStringArrayListExtra(String)
+         * @since 1.1.3
+         */
+        public Builder putStringArrayListExtra(String name, ArrayList<String> value) {
+            mIntent.putStringArrayListExtra(name, value);
             return this;
         }
         public LauncherIntent build(){

@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 112
-        versionName "1.1.2"
+        versionCode 113
+        versionName "1.1.3"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -54,7 +54,7 @@ ext {
     gitUrl = siteUrl + '.git'
     githubRepository= 'LightSun/android-util2'
 
-    libraryVersion = '1.1.2'
+    libraryVersion = '1.1.3'
 
     developerId = 'heaven7'
     developerName = 'heaven7'
