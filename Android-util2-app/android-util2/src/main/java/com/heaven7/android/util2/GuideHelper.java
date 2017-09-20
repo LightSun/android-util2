@@ -211,6 +211,7 @@ public class GuideHelper implements AppGuideComponent {
                     anchor.getWidth(), anchor.getHeight());
             mlp.leftMargin = x;
             mlp.topMargin = y;
+            //mCallback.onAdjustLayoutParamsForAnchor(mlp);
             vg.addView(copy, mlp);
             mCallback.onBindData(copy);
             //tip may be null.
@@ -252,6 +253,7 @@ public class GuideHelper implements AppGuideComponent {
                     default:
                         throw new UnsupportedOperationException();
                 }
+               // mCallback.onAdjustLayoutParamsForTip(mlp);
                 vg.addView(tip, mlp);
                 tip.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {

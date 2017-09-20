@@ -3,11 +3,17 @@ package com.heaven7.android.util2.demo.sample;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.heaven7.adapter.BaseSelector;
+import com.heaven7.adapter.ISelectable;
+import com.heaven7.adapter.QuickRecycleViewAdapter;
 import com.heaven7.android.component.guide.AppGuideComponent;
 import com.heaven7.android.component.guide.GuideComponent;
 import com.heaven7.android.component.guide.RelativeLocation;
@@ -16,7 +22,11 @@ import com.heaven7.android.util2.demo.BaseActivity;
 import com.heaven7.android.util2.demo.R;
 import com.heaven7.core.util.Logger;
 import com.heaven7.core.util.MainWorker;
+import com.heaven7.core.util.ViewHelper;
 import com.heaven7.java.base.util.ArrayUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -30,6 +40,15 @@ public class TestGuideActivity extends BaseActivity {
     @BindView(R.id.tb)
     ToggleButton mTb_1;
 
+    @BindView(R.id.nsv)
+    NestedScrollView mNsv;
+
+    @BindView(R.id.rv)
+    RecyclerView mRv;
+
+    @BindView(R.id.tv_title)
+    TextView mTv_title;
+
     private AppGuideComponent mGH;
     private TextView mTip;
     private byte mIndex = -1;
@@ -41,13 +60,56 @@ public class TestGuideActivity extends BaseActivity {
 
     @Override
     public void onInitialize(Context context, @Nullable Bundle savedInstanceState) {
+        mRv.setLayoutManager(new LinearLayoutManager(context));
+        mRv.setNestedScrollingEnabled(false);
+
         mGH = new GuideHelper(this, getLayoutId());
 
         ViewGroup tipView = (ViewGroup) getLayoutInflater().inflate(R.layout.test_tip, null);
         mTip = (TextView) tipView.findViewById(R.id.test_tv_tip);
         tipView.removeAllViews();
 
-        showTip();
+        populateData(context);
+    }
+
+    //模拟实际场景，设置数据
+    private void populateData(Context context) {
+        mTv_title.setText("第三方空间好几个环节都是开发商的开发大赛的十分关键的是房价肯定是开放的考虑是否快乐的首付款的说法的十分的说法是地方艰苦");
+        List<BaseSelector>  list = new ArrayList<>();
+        for(int i=0 ; i < 20 ; i++){
+            list.add(new BaseSelector());
+        }
+        mRv.setAdapter(new QuickRecycleViewAdapter<BaseSelector>(
+                R.layout.item_test_guide, list) {
+            @Override
+            protected void onBindData(Context context, int position,
+                                      BaseSelector item, int itemLayoutId, ViewHelper helper) {
+
+            }
+        });
+        mNsv.getParent().requestChildFocus(mNsv, mNsv); //请求焦点。对于scrollview 类的可以自动滑动到顶部
+       // mNsv.scrollTo(0, 0);
+        showTipDelay();
+        /*mNsv.post(new Runnable() {
+            @Override
+            public void run() {
+                if(!mNsv.fullScroll(View.FOCUS_UP)){
+                    Logger.w("TestGuideActivity","run","fullScroll UP failed.");
+                }else{
+                    mNsv.removeCallbacks(this);
+                    showTipDelay();
+                }
+            }
+        });*/
+    }
+
+    private void showTipDelay(){
+        MainWorker.postDelay(5, new Runnable() {
+            @Override
+            public void run() {
+                showTip();
+            }
+        });
     }
 
     private void showTip() {

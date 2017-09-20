@@ -1,36 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/sc"
         style="@style/switch_common"
-        android:layout_marginTop="20dp"
-        />
-    <android.support.v7.widget.SwitchCompat
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:switchMinWidth="50dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        />
+        android:layout_marginTop="20dp" />
 
-    <ToggleButton
-        android:id="@+id/tb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:textOn=""
-        android:textOff=""
-        android:background="#1bc47e"
-        android:disabledAlpha="125"
-        android:checked="true"
-        />
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nsv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:singleLine="false"
+                />
+
+            <ToggleButton
+                android:id="@+id/tb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="#1bc47e"
+                android:checked="true"
+                android:disabledAlpha="125"
+                android:textOff=""
+                android:textOn="" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
 
 </LinearLayout>
