@@ -45,7 +45,7 @@ public abstract class BaseWindow implements IWindow, AppToastComponent{
     private final WindowConfig mDefaultConfig;
     private final WindowConfig mUsingConfig;
 
-    private boolean mShowing;
+    private volatile boolean mShowing;
     private Runnable mStart;
     private Runnable mEnd;
 
@@ -229,12 +229,14 @@ public abstract class BaseWindow implements IWindow, AppToastComponent{
         if (params.start != null) {
             params.start.run();
         }
-        if (mShowing) {
-            cancelImpl();
+
+        if (mWindowView.getParent() != null) {
+            mWM.removeView(mWindowView);
         }
         mShowing = true;
         //mWindowView.setY(-mWindowView.getMeasuredHeight());
         mWM.addView(mWindowView, mUsingConfig.wlp);
+
         //duration < 0, means until cancel.
         if (mUsingConfig.duration > 0) {
             mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_CANCEL, params),

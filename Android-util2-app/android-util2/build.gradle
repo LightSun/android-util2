@@ -54,7 +54,7 @@ ext {
     gitUrl = siteUrl + '.git'
     githubRepository= 'LightSun/android-util2'
 
-    libraryVersion = '1.1.5' //next
+    libraryVersion = '1.1.5'
 
     developerId = 'heaven7'
     developerName = 'heaven7'
