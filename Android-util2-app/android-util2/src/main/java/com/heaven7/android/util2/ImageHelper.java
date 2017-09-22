@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
 import com.heaven7.core.util.Logger;
@@ -16,6 +18,24 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
 
+ /* after android N:
+   <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.class100.android.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        //you need to create a provider_paths.xml to /res/xml/ dir
+
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+<external-path name="external_files" path="."/>
+</paths>
+     */
 /**
  * get image from pick or camera.
  *
@@ -46,6 +66,15 @@ public class ImageHelper {
         this.mDir = dir;
         this.mWeakActivity = new WeakReference<Activity>(activity);
         this.mCallback = mCallback;
+    }
+
+    /**
+     * get the authority of FileProvider.
+     * @param activity the activity.
+     * @return the authority
+     */
+    protected String getAuthority(Activity activity){
+        return activity.getPackageName() + ".fileprovider";
     }
 
     /**
@@ -175,7 +204,13 @@ public class ImageHelper {
         intent.putExtra("outputY", 64);
         intent.putExtra("return-data", true);
 
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(mFile = getImageFile()));
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            final Uri outputUri = FileProvider.getUriForFile(activity,
+                    getAuthority(activity), mFile = getImageFile());
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
+        }else {
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mFile = getImageFile()));
+        }
         mCallback.buildZoomIntent(intent);
 
         activity.startActivityForResult(intent, PHOTO_RESULT);
