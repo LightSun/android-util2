@@ -5,4 +5,11 @@
     <string name="error_toast">error toast</string>
     <string name="warn_toast">warn toast</string>
     <string name="normal_toast">normal toast</string>
+
+    <string name="hello">Hello World, PhotoIntentActivity!</string>
+    <string name="btnIntend">Take (big) Picture</string>
+    <string name="btnIntendS">Take (small) Picture</string>
+    <string name="btnIntendV">Take Video</string>
+    <string name="cannot">Cannot</string>
+    <string name="album_name">CameraSample</string>
 </resources>

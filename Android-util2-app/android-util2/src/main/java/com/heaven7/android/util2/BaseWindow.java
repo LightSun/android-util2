@@ -199,6 +199,7 @@ public abstract class BaseWindow implements IWindow, AppToastComponent{
         final Params p = new Params(mStart, mEnd);
         mStart = null;
         mEnd = null;
+        mHandler.removeMessages(MSG_SHOW);
         mHandler.obtainMessage(MSG_SHOW, p).sendToTarget();
     }
 
