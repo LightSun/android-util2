@@ -208,7 +208,6 @@ public class ImageHelper {
 
             case SELECT_PIC_NOUGAT://版本>= 7.0
                 File imgUri = new File(FilePathCompat.getFilePath(activity, data.getData()));
-                Logger.w("Button3Activity","onActivityResult"," exist = " + imgUri.exists() + " ," + imgUri);
                 startPhotoZoom(getUriForFile(imgUri));
                 break;
         }
