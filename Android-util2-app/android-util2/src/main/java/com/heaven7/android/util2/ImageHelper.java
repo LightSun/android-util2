@@ -1,6 +1,7 @@
 package com.heaven7.android.util2;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -206,7 +207,7 @@ public class ImageHelper {
             }
 
             case SELECT_PIC_NOUGAT://版本>= 7.0
-                File imgUri = new File(getPath(activity, data.getData()));
+                File imgUri = new File(FilePathCompat.getFilePath(activity, data.getData()));
                 Logger.w("Button3Activity","onActivityResult"," exist = " + imgUri.exists() + " ," + imgUri);
                 startPhotoZoom(getUriForFile(imgUri));
                 break;
@@ -232,7 +233,7 @@ public class ImageHelper {
         } else {
             Uri outPutUri = Uri.fromFile(mCropFile);
             if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                String url = getPath(activity, inputUri); //这个方法是处理4.4以上图片返回的Uri对象不同的处理方法
+                String url = FilePathCompat.getFilePath(activity, inputUri); //这个方法是处理4.4以上图片返回的Uri对象不同的处理方法
                 File file = new File(url);
                 Logger.i("Button3Activity","startPhotoZoom","url = " + url +", "
                         + Environment.getExternalStorageDirectory().getAbsolutePath());
@@ -306,23 +307,6 @@ public class ImageHelper {
         if (activity == null)
             throw new IllegalStateException("activity is mDestroied?");
         return activity;
-    }
-
-    //may be content:// or file:///
-    public static String getPath(Context context, Uri inputUri) {
-        String temp = inputUri.toString();
-        if(temp.startsWith("file://")){
-            return temp.substring("file://".length());
-        }
-
-        String[] proj = { MediaStore.Images.Media.DATA };
-        CursorLoader loader = new CursorLoader(context,
-                inputUri, proj, null, null, null);
-        Cursor cursor = loader.loadInBackground();
-        int column_index = cursor
-                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
     }
 
     /**

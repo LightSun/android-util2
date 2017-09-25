@@ -45,6 +45,9 @@ public class TestGetImageInN extends BaseActivity {
 
     @Override
     public void onInitialize(Context context, @Nullable Bundle savedInstanceState) {
+        mImageGetter = new ImageHelper(getExternalFilesDir(
+                Environment.DIRECTORY_PICTURES).getAbsolutePath(), TestGetImageInN.this, new ImageCallbackImpl()){
+        };
         mPermissionHelper.startRequestPermission(
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 new int[]{RC_WRITE_SD},
@@ -61,9 +64,7 @@ public class TestGetImageInN extends BaseActivity {
     }
 
     private void initImageGetter(){
-        mImageGetter = new ImageHelper(getExternalFilesDir(
-                Environment.DIRECTORY_PICTURES).getAbsolutePath(), TestGetImageInN.this, new ImageCallbackImpl()){
-        };
+
     }
 
     @OnClick(R.id.bt_toast_normal)
@@ -90,7 +91,7 @@ public class TestGetImageInN extends BaseActivity {
         @Override
         public void onSuccess(final File file, final Bitmap photo) {
             //mIcon.setImageBitmap(photo);
-            Logger.i("ImageCallbackImpl","onSuccess","" + photo);
+            Logger.i("ImageCallbackImpl","onSuccess","file = " + file + " , photo = " + photo);
             iv_photo.setImageBitmap(photo);
         }
     }
