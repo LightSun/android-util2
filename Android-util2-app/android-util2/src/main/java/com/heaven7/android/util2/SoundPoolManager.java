@@ -126,8 +126,9 @@ public final class SoundPoolManager {
      * release the all sound.
      */
     public void release() {
-        mPool.release();
         mHandlers.clear();
+        mPool.setOnLoadCompleteListener(null);
+        mPool.release();
     }
 
     /**
