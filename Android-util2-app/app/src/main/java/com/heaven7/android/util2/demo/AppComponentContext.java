@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.heaven7.android.component.toast.AppToastComponent;
-import com.heaven7.core.util.Toaster;
 
 /**
  * the component context.
@@ -21,7 +20,7 @@ public interface AppComponentContext {
 
     /**
      * get the toaster.
-     * @return  the {@link Toaster}
+     * @return  the
      */
     AppToastComponent getToastWindow();
 

@@ -20,7 +20,6 @@ import javax.net.ssl.TrustManagerFactory;
  */
 public class HttpsHelper {
 
-
     /**
      * create ssl socket factory. by target crt file.
      * @param context the context.
