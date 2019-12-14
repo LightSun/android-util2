@@ -6,10 +6,11 @@
 
     <uses-feature android:name="android.hardware.camera" />
 
-    <application android:allowBackup="true" android:label="@string/app_name"
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        >
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +21,6 @@
         <activity android:name=".sample.ToastTestActivity"/>
         <activity android:name=".sample.TestGuideActivity"/>
         <activity android:name=".sample.TestGetImageInN"/>
-        <activity android:name=".photointent.PhotoIntentActivity"/>
         <activity android:name=".sample.Button3Activity"/>
 
         <provider

@@ -1,13 +1,13 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
+//apply plugin: 'com.novoda.bintray-release'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.3"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 120
         versionName "1.2.0"
 
@@ -34,8 +34,8 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation "com.android.support:recyclerview-v7:26.1.0"
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation "com.android.support:recyclerview-v7:28.0.0"
     testImplementation 'junit:junit:4.12'
 
     implementation 'com.heaven7.core.adapter:adapter:1.8.8' // 1.8.8
@@ -75,11 +75,11 @@ ext {
 //apply from: 'https://raw.githubusercontent.com/nisrulz/JCenter/master/bintrayv1.gradle'
 //gradlew clean build install bintrayUpload
 
-publish {
+/*publish {
     userOrg = 'lightsun'
     groupId = 'com.heaven7.android.util2'
     artifactId = 'android-util2'
     publishVersion = android.defaultConfig.versionName
     desc = 'Android util2'
     website = 'https://github.com/LightSun/android-util2'
-}
+}*/
