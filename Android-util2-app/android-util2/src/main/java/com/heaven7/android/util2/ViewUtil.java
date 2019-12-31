@@ -1,14 +1,18 @@
 package com.heaven7.android.util2;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Build;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 /**
  * this help class of view.
@@ -48,17 +52,17 @@ public final class ViewUtil {
      */
     public static int getStatusHeight(Context context) {
         //com.android.internal.R.dimen.status_bar_height
-        int statusHeight = 25; //default is 25
         try {
             Class<?> clazz = Class.forName("com.android.internal.R$dimen");
             Object object = clazz.newInstance();
             int height = Integer.parseInt(clazz.getField("status_bar_height")
                     .get(object).toString());
-            statusHeight = context.getResources().getDimensionPixelSize(height);
+            return context.getResources().getDimensionPixelSize(height);
         } catch (Exception e) {
             //ignore
+            int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+            return context.getResources().getDimensionPixelSize(resourceId);
         }
-        return statusHeight;
     }
     /**
      * request focus for target view
