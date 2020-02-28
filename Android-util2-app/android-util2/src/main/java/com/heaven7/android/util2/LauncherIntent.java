@@ -2,20 +2,18 @@ package com.heaven7.android.util2;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.ArraySet;
+
+import androidx.annotation.NonNull;
 
 import com.heaven7.core.util.Logger;
+import com.heaven7.java.base.anno.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;

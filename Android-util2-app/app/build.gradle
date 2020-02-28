@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply from: '../androidx_compat.gradle'
 
 android {
     compileSdkVersion 28
@@ -8,12 +9,10 @@ android {
 
     defaultConfig {
         applicationId "com.heaven7.android.util2.demo"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -30,22 +29,22 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    testImplementation 'junit:junit:4.12'
     //testCompile "org.robolectric:robolectric:3.3.2" //robolectric unit test lib.need as 3.0+
     //testCompile "org.assertj:assertj-core:1.7.0"
-
-    implementation "com.android.support:design:${SUPPORT_VERSION}"
-    implementation "com.android.support:cardview-v7:${SUPPORT_VERSION}"
-    implementation "com.android.support:recyclerview-v7:${RECYCLEVIEW_VERSION}"
 
     annotationProcessor "com.jakewharton:butterknife-compiler:8.2.0"
     implementation "com.jakewharton:butterknife:${BUTTER_KNIFE_VERSION}"
 
     //compile 'com.heaven7.android.demolib:android-demo-lib:1.0.1'
 
-    implementation 'com.heaven7.java.base:Java-base:1.1.0'
-    implementation 'com.heaven7.core.adapter:adapter:1.8.8'
-    implementation 'com.heaven7.core.util:util-v1:1.1.2'
-    implementation 'com.heaven7.android.component:android-app-components:1.0.7'
+    implementation 'com.github.LightSun:SuperAdapter:2.0.9-x'
+    implementation 'com.heaven7.java.base:Java-base:1.2.0'
+
+    implementation('com.github.LightSun:util-v1:1.1.7-beta-x') {
+        exclude group: 'com.android.support'
+        exclude group: 'com.heaven7.android.component'
+    }
+    implementation 'com.github.LightSun:android-component:1.1.5-beta-x'
+
     implementation project(':android-util2')
 }

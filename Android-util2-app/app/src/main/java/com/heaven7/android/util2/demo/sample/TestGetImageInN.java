@@ -59,6 +59,10 @@ public class TestGetImageInN extends BaseActivity {
                             initImageGetter();
                         }
                     }
+                    @Override
+                    public boolean handlePermissionHadRefused(String s, int i, Runnable runnable) {
+                        return false;
+                    }
                 });
 
     }

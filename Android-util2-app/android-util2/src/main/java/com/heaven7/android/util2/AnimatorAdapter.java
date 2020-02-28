@@ -1,11 +1,12 @@
 package com.heaven7.android.util2;
 
 import android.animation.*;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.heaven7.adapter.AdapterManager;
 

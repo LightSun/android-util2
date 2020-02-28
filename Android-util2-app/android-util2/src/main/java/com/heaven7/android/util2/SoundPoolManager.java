@@ -5,10 +5,11 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.annotation.RawRes;
+
+import androidx.annotation.RawRes;
 
 import com.heaven7.core.util.Logger;
+import com.heaven7.java.base.anno.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;

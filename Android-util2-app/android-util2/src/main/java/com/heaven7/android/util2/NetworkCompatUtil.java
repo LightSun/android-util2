@@ -5,7 +5,8 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.support.annotation.Nullable;
+
+import com.heaven7.java.base.anno.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,8 @@ public class NetworkCompatUtil {
      * @param networkType the network type . see {@linkplain ConnectivityManager#TYPE_WIFI} and etc.
      * @return the target network info.
      */
-    public static @Nullable NetworkInfo getConnectedNetworkByType(Context context, int networkType) {
+    public static @Nullable
+    NetworkInfo getConnectedNetworkByType(Context context, int networkType) {
         List<NetworkInfo> list = getConnectedNetworks(context);
         if (list == null) {
             return null;

@@ -2,12 +2,13 @@ package com.heaven7.android.util2;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+
+import androidx.annotation.LayoutRes;
 
 import com.heaven7.android.component.guide.AppGuideComponent;
 import com.heaven7.android.component.guide.GuideComponent;

@@ -47,8 +47,8 @@ public class WeakObject<T> {
             }
             return t;
         }
-        if(t instanceof android.support.v4.app.Fragment){
-            final android.support.v4.app.Fragment frag = (android.support.v4.app.Fragment) t;
+        if(t instanceof android.app.Fragment){
+            final android.app.Fragment frag = (android.app.Fragment) t;
             if(frag.isDetached() || frag.isRemoving()){
                 Logger.w(TAG,"get","fragment is detached or removing. fragment = " + name);
                 return null;

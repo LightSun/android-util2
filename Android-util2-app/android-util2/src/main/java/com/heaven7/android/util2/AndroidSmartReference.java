@@ -32,7 +32,7 @@ public class AndroidSmartReference<T> extends SmartReference<T> {
     protected boolean shouldWeakReference(T t) {
         return t instanceof Context || t instanceof View
                 || t instanceof Fragment
-                || t instanceof android.support.v4.app.Fragment;
+                || t instanceof android.app.Fragment;
     }
 
     @Override
@@ -50,8 +50,8 @@ public class AndroidSmartReference<T> extends SmartReference<T> {
                 return true;
             }
         }
-        if(t instanceof android.support.v4.app.Fragment){
-            final android.support.v4.app.Fragment frag = (android.support.v4.app.Fragment) t;
+        if(t instanceof android.app.Fragment){
+            final android.app.Fragment frag = (android.app.Fragment) t;
             if(frag.isDetached() || frag.isRemoving()){
                 Logger.w(TAG,"shouldDestroyReference","fragment is detached or removing. fragment = " + name);
                 return true;

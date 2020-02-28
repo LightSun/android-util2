@@ -2,7 +2,9 @@ package com.heaven7.android.util2;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.ArrayRes;
+
+import androidx.annotation.ArrayRes;
+
 import com.heaven7.java.base.util.Predicates;
 
 import java.util.ArrayList;

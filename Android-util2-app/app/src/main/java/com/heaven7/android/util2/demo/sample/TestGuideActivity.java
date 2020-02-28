@@ -3,16 +3,16 @@ package com.heaven7.android.util2.demo.sample;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.heaven7.adapter.BaseSelector;
-import com.heaven7.adapter.ISelectable;
 import com.heaven7.adapter.QuickRecycleViewAdapter;
 import com.heaven7.android.component.guide.AppGuideComponent;
 import com.heaven7.android.component.guide.GuideComponent;
