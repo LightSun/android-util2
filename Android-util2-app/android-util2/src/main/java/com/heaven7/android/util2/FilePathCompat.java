@@ -34,6 +34,11 @@ public class FilePathCompat {
      * @return the file path
      */
     public static String getFilePath(Context context, Uri data){
+        //content://com.android.providers.downloads.documents/document/raw:/storage/emulated/0/Download/交易/app-release_219_jiagu_sign.apk
+        //content://com.android.providers.downloads.documents/document/raw:/storage/emulated/0/Download/.com.google.Chrome.jfRtT6
+        if(data.getPathSegments() != null && data.getPathSegments().contains("raw:")){
+            return  DocumentsContract.getDocumentId(data).replace("raw:", "");
+        }
         return sResolver.getFilePath(context, data);
     }
 

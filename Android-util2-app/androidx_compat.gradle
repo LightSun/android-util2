@@ -8,11 +8,11 @@ dependencies {
         implementation  "androidx.appcompat:appcompat:$androidX_ver"
         implementation  "androidx.recyclerview:recyclerview:$androidX_ver"
        // implementation  "androidx.exifinterface:exifinterface:$androidX_ver"
-        implementation  "com.google.android.material:material:$androidX_ver"
+       // implementation  "com.google.android.material:material:$androidX_ver"
     }else {
         implementation "com.android.support:recyclerview-v7:$androidSupport_ver"
         implementation "com.android.support:appcompat-v7:$androidSupport_ver"
        // implementation "com.android.support:exifinterface:$androidSupport_ver"
-        implementation "com.android.support:design:${androidSupport_ver}"
+        //implementation "com.android.support:design:${androidSupport_ver}"
     }
 }

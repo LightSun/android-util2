@@ -35,7 +35,7 @@ public class LauncherIntent extends Intent {
      */
     protected LauncherIntent(Context context, Class<?> targetClass) {
         super(context, targetClass);
-        this.mWeakContext = new WeakContextOwner(context);
+        setContext(context);
     }
 
     /**
