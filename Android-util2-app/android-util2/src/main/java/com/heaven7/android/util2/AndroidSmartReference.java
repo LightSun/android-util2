@@ -1,10 +1,11 @@
 package com.heaven7.android.util2;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Build;
 import android.view.View;
+
+import androidx.fragment.app.Fragment;
 
 import com.heaven7.core.util.Logger;
 import com.heaven7.java.base.util.SmartReference;
