@@ -11,11 +11,13 @@ import android.os.Bundle;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.heaven7.core.util.Logger;
 import com.heaven7.java.base.anno.Nullable;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
@@ -28,6 +30,7 @@ public class LauncherIntent extends Intent {
 
     private WeakContextOwner mWeakContext;
     private AndroidSmartReference<IntentActionCallback> mRefCallback;
+    private WeakReference<Fragment> mWeakFragment;
 
     /**
      * create the launcher intent by context and target class .
@@ -67,6 +70,15 @@ public class LauncherIntent extends Intent {
      */
     public static LauncherIntent create(Context context) {
         return new LauncherIntent().setContext(context);
+    }
+
+    /**
+     * set current fragment
+     * @param fragment the fragment
+     * @since 1.2.1
+     */
+    public void setFragment(Fragment fragment) {
+        this.mWeakFragment = new WeakReference<>(fragment);
     }
 
     /**
@@ -184,7 +196,13 @@ public class LauncherIntent extends Intent {
 
             @Override
             public boolean act(Context context, Intent intent) {
-                ((Activity) context).startActivityForResult(intent, requestCode);
+                LauncherIntent li = (LauncherIntent) intent;
+                Fragment frag = li.getFragment();
+                if(frag != null){
+                    frag.startActivityForResult(intent, requestCode);
+                }else {
+                    ((Activity) context).startActivityForResult(intent, requestCode);
+                }
                 return true;
             }
         });
@@ -210,7 +228,13 @@ public class LauncherIntent extends Intent {
             @TargetApi(16)
             @Override
             public boolean act(Context context, Intent intent) {
-                ((Activity) context).startActivityForResult(intent, requestCode, options);
+                LauncherIntent li = (LauncherIntent) intent;
+                Fragment frag = li.getFragment();
+                if(frag != null){
+                    frag.startActivityForResult(intent, requestCode, options);
+                }else {
+                    ((Activity) context).startActivityForResult(intent, requestCode, options);
+                }
                 return true;
             }
         });
@@ -343,6 +367,9 @@ public class LauncherIntent extends Intent {
         return mRefCallback != null ? mRefCallback.get() : null;
     }
 
+    private Fragment getFragment() {
+        return mWeakFragment != null ? mWeakFragment.get() : null;
+    }
     /**
      * the launcher intent builder.
      * almost all method from {@linkplain Intent}.
@@ -375,6 +402,23 @@ public class LauncherIntent extends Intent {
         public Builder setClass(Context packageContext, Class<?> cls) {
             mIntent.setContext(packageContext);
             mIntent.setClass(packageContext, cls);
+            return this;
+        }
+
+        /**
+         * set class. this is used for 'fragment.startActivityForResult(...)'
+         * @param fragment the fragment
+         * @param cls the target class
+         * @return this.
+         * @since 1.2.1
+         */
+        public Builder setClass(Fragment fragment, Class<?> cls) {
+            if(fragment.getContext() == null){
+                throw new IllegalStateException();
+            }
+            mIntent.setContext(fragment.getContext());
+            mIntent.setClass(fragment.getContext(), cls);
+            mIntent.setFragment(fragment);
             return this;
         }
 
@@ -825,7 +869,6 @@ public class LauncherIntent extends Intent {
             return this;
         }
     }
-
 
     //====================================================
 

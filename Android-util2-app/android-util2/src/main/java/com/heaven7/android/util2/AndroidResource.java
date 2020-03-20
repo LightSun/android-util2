@@ -15,7 +15,7 @@ import java.util.List;
  * @since 1.0.4
  */
 
-public class AndroidResource {
+public final class AndroidResource {
 
     /**
      * the default resource id = 0.

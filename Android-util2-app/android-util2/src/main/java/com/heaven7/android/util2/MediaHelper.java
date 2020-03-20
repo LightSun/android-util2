@@ -101,6 +101,7 @@ public class MediaHelper {
         if(mPlayer != null && mPlayer.isPlaying()) {
             Logger.d(TAG, "stopPlay", "");
             mPlayer.stop();
+            mPlayer.reset();
             setStateInternal(STATE_NOT_START);
         }
     }

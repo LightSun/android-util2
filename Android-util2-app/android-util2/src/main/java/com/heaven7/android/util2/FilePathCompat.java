@@ -3,6 +3,9 @@ package com.heaven7.android.util2;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -10,12 +13,18 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
+import androidx.core.content.FileProvider;
+
+import java.io.File;
+import java.lang.reflect.Method;
+import java.util.List;
+
 /**
  * Created by heaven7 on 2017/9/25 0025.
  * @since 1.1.8
  */
 
-public class FilePathCompat {
+public final class FilePathCompat {
 
     private static final FilePathResolver sResolver;
 
@@ -34,12 +43,66 @@ public class FilePathCompat {
      * @return the file path
      */
     public static String getFilePath(Context context, Uri data){
-        //content://com.android.providers.downloads.documents/document/raw:/storage/emulated/0/Download/交易/app-release_219_jiagu_sign.apk
-        //content://com.android.providers.downloads.documents/document/raw:/storage/emulated/0/Download/.com.google.Chrome.jfRtT6
-        if(data.getPathSegments() != null && data.getPathSegments().contains("raw:")){
-            return  DocumentsContract.getDocumentId(data).replace("raw:", "");
+        String result = null;
+        try {
+            //content://com.android.providers.downloads.documents/document/raw:/storage/emulated/0/Download/交易/app-release_219_jiagu_sign.apk
+            //content://com.android.providers.downloads.documents/document/raw:/storage/emulated/0/Download/.com.google.Chrome.jfRtT6
+            if(data.getPathSegments() != null && data.getPathSegments().contains("raw:")){
+                result = DocumentsContract.getDocumentId(data).replace("raw:", "");
+            }else {
+                result = sResolver.getFilePath(context, data);
+            }
+        }catch (Exception e){
+            //ignore
+            //e.printStackTrace();
         }
-        return sResolver.getFilePath(context, data);
+        //wx
+        if(result == null){
+            result = getPathFromFileProvider(context, data);
+        }
+        return result;
+    }
+
+    private static String getPathFromFileProvider(Context context, Uri uri) {
+        try {
+            List<PackageInfo> packs = context.getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS);
+            if (packs != null) {
+                //String fileProviderClassName = FileProvider.class.getName();
+                for (PackageInfo pack : packs) {
+                    ProviderInfo[] providers = pack.providers;
+                    if (providers != null) {
+                        for (ProviderInfo provider : providers) {
+                            if (uri.getAuthority().equals(provider.authority)) {
+                                // if (provider.name.equalsIgnoreCase(fileProviderClassName)) {
+                                Class<FileProvider> fileProviderClass = FileProvider.class;
+                                try {
+                                    Method getPathStrategy = fileProviderClass.getDeclaredMethod("getPathStrategy", Context.class, String.class);
+                                    getPathStrategy.setAccessible(true);
+                                    Object invoke = getPathStrategy.invoke(null, context, uri.getAuthority());
+                                    if (invoke != null) {
+                                        String PathStrategyStringClass = FileProvider.class.getName() + "$PathStrategy";
+                                        Class<?> PathStrategy = Class.forName(PathStrategyStringClass);
+                                        Method getFileForUri = PathStrategy.getDeclaredMethod("getFileForUri", Uri.class);
+                                        getFileForUri.setAccessible(true);
+                                        Object invoke1 = getFileForUri.invoke(invoke, uri);
+                                        if (invoke1 instanceof File) {
+                                            String filePath = ((File) invoke1).getAbsolutePath();
+                                            return filePath;
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public interface FilePathResolver {
