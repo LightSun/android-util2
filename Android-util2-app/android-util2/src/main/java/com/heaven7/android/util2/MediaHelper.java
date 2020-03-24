@@ -188,6 +188,9 @@ public class MediaHelper {
     private boolean startPlayFile(final String filename, final int position){
         Logger.d(TAG,"startPlayFile","filename/url = " + filename);
         if(!TextUtils.isEmpty(filename) && mPlayer != null){
+            if(mCallback != null){
+                mCallback.onPrePrepare(mPlayer, filename);
+            }
             try {
                 mPlayer.reset();
                 mPlayer.setDataSource(filename);
@@ -252,6 +255,15 @@ public class MediaHelper {
      */
     public static abstract class MediaCallback implements MediaPlayer.OnErrorListener{
 
+        /**
+         * called on pre prepare.
+         * @param mp the player
+         * @param filename the filename
+         * @since 1.2.1
+         */
+        public void onPrePrepare(MediaPlayer mp, String filename) {
+
+        }
         /**
          * called on play complete.
          * @param mp the media player
