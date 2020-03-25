@@ -184,6 +184,21 @@ public class MediaHelper {
     protected boolean shouldPrepareAsync(String  link){
         return link.startsWith("http://") || link.startsWith("https://");
     }
+    public static String getStateString(byte state) {
+        switch (state){
+            case STATE_PLAYING:
+                return "STATE_PLAYING";
+            case STATE_PAUSED:
+                return "STATE_PAUSED";
+            case STATE_NOT_START:
+                return "STATE_NOT_START";
+            case STATE_BUFFERING:
+                return "STATE_BUFFERING";
+            case STATE_RELEASE:
+                return "STATE_RELEASE";
+        }
+        return null;
+    }
     //====================================================
     private boolean startPlayFile(final String filename, final int position){
         Logger.d(TAG,"startPlayFile","filename/url = " + filename);
