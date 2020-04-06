@@ -45,7 +45,6 @@ public class WeakObject<T> {
                         + name);
                 return null;
             }
-            return t;
         }
         if(t instanceof androidx.fragment.app.Fragment){
             final androidx.fragment.app.Fragment frag = (androidx.fragment.app.Fragment) t;
@@ -53,7 +52,6 @@ public class WeakObject<T> {
                 Logger.w(TAG,"get","fragment is detached or removing. fragment = " + name);
                 return null;
             }
-            return t;
         }
         if( t instanceof Fragment){
             final Fragment frag = (Fragment) t;
@@ -61,7 +59,6 @@ public class WeakObject<T> {
                 Logger.w(TAG,"get","fragment is detached or removing. fragment = " + name);
                 return null;
             }
-            return t;
         }
        /* if(t instanceof View){
             if(Build.VERSION.SDK_INT >= 19 && !((View) t).isAttachedToWindow()){

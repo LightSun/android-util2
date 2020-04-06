@@ -36,9 +36,8 @@ public class WeakContextOwner{
                         + t.getClass().getName());
                 return null;
             }
-            return t;
         }
-        return null;
+        return t;
     }
 
     /**
