@@ -22,7 +22,7 @@ public class MediaHelper {
     public static final byte STATE_RELEASE    = 5;
 
     private static final String TAG = "MediaHelper";
-    private final MediaCallback mCallback;
+    private MediaCallback mCallback;
     private MediaPlayer mPlayer;
     private byte mState = STATE_NOT_START;
 
@@ -33,6 +33,44 @@ public class MediaHelper {
         mPlayer.setOnErrorListener(mCallback);
     }
 
+    /**
+     * create media player with empty parameter
+     * @since 1.3.0
+     */
+    public MediaHelper(){ }
+
+    /**
+     * initialize the player if need
+     * @since 1.3.0
+     */
+    public void initializePlayerIfNeed(){
+        if(mPlayer == null){
+            mPlayer = new MediaPlayer();
+            if(mCallback == null){
+                mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                    @Override
+                    public boolean onError(MediaPlayer mp, int what, int extra) {
+                        Logger.e(TAG, "onError", "what = " + what + " , extra = " + extra);
+                        return false;
+                    }
+                });
+            }else {
+                mPlayer.setOnErrorListener(mCallback);
+            }
+        }
+    }
+
+    /**
+     * set media callback
+     * @param callback the callback
+     * @since 1.3.0
+     */
+    public void setMediaCallback(MediaCallback callback){
+        this.mCallback = callback;
+        if(mPlayer != null && callback != null){
+            mPlayer.setOnErrorListener(callback);
+        }
+    }
     /**
      * get media player.
      * @return the media player.
