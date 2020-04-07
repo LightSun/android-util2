@@ -279,7 +279,14 @@ public class MediaHelper {
         return false;
     }
 
-    private void setStateInternal(byte newState){
+    private void onPlayFileComplete(String filename) {
+        setStateInternal(STATE_NOT_START); //done to unstart
+        if(mCallback != null){
+            mCallback.onPlayComplete(mPlayer, filename);
+        }
+    }
+
+    protected void setStateInternal(byte newState){
         if(mState != newState){
             mState = newState;
             if(mCallback != null){
@@ -287,20 +294,12 @@ public class MediaHelper {
             }
         }
     }
-
-    private void onPrepared(MediaPlayer mp, int position) {
+    protected void onPrepared(MediaPlayer mp, int position) {
         if(position > 0 && position < mp.getDuration()) {
             mp.seekTo(position);
         }
         setStateInternal(STATE_PLAYING);
         mp.start();
-    }
-
-    private void onPlayFileComplete(String filename) {
-        setStateInternal(STATE_NOT_START); //done to unstart
-        if(mCallback != null){
-            mCallback.onPlayComplete(mPlayer, filename);
-        }
     }
 
     /**
