@@ -75,6 +75,7 @@ public class MediaHelper {
     /**
      * get the media state
      * @return the media state
+     * @since 1.3.1
      */
     public byte getMediaState(){
         return mState;
