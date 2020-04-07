@@ -24,7 +24,7 @@ public class MediaHelper {
     private static final String TAG = "MediaHelper";
     private MediaCallback mCallback;
     private MediaPlayer mPlayer;
-    private byte mState = STATE_NOT_START;
+    private volatile byte mState = STATE_NOT_START;
 
     public MediaHelper(MediaCallback callback){
         Throwables.checkNull(callback);
@@ -70,6 +70,14 @@ public class MediaHelper {
         if(mPlayer != null && callback != null){
             mPlayer.setOnErrorListener(callback);
         }
+    }
+
+    /**
+     * get the media state
+     * @return the media state
+     */
+    public byte getMediaState(){
+        return mState;
     }
     /**
      * get media player.
