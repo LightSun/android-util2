@@ -255,7 +255,11 @@ public class MediaHelper {
             }
             try {
                 mPlayer.reset();
-                mCallback.setDataSource(mPlayer, filename);
+                if(mCallback != null){
+                    mCallback.setDataSource(mPlayer, filename);
+                }else {
+                    mPlayer.setDataSource(filename);
+                }
                 mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
