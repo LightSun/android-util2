@@ -255,7 +255,7 @@ public class MediaHelper {
             }
             try {
                 mPlayer.reset();
-                mPlayer.setDataSource(filename);
+                mCallback.setDataSource(mPlayer, filename);
                 mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
@@ -346,6 +346,20 @@ public class MediaHelper {
          */
         public void onPrepareComplete(MediaPlayer mp, String filename){
 
+        }
+        /**
+         * called on set data source.
+         * @param  mp the media player
+         * @param url the url
+         * @since 1.3.2
+         */
+        public void setDataSource(MediaPlayer mp, String url) {
+            //may be uri.
+            try {
+                mp.setDataSource(url);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         @Override
