@@ -45,8 +45,28 @@ public final class FilePathCompat {
     public static String getFilePath(Context context, Uri data){
         String result = null;
         try {
+            //path = /document/home:董文秀的模板17:58.pdf
+            //content://com.android.providers.downloads.documents/document/home:董文秀的模板17:58.pdf
             //content://com.android.providers.downloads.documents/document/raw:/storage/emulated/0/Download/交易/app-release_219_jiagu_sign.apk
             //content://com.android.providers.downloads.documents/document/raw:/storage/emulated/0/Download/.com.google.Chrome.jfRtT6
+            if (DocumentsContract.isDocumentUri(context, data)) {
+                String docId = DocumentsContract.getDocumentId(data);
+                if ("com.android.externalstorage.documents".equals(data.getAuthority())) {
+                    String dir = docId.split(":")[0];
+                    String str = docId.split(":")[1];
+                    if(str.startsWith(Environment.getExternalStorageDirectory().getAbsolutePath())){
+                        result = DocumentsContract.getDocumentId(data).replace(dir + ":", "");
+                    }else {
+                        result = Environment.getExternalStorageDirectory() +  "/Documents/"
+                                + docId.substring(docId.indexOf(dir)+ dir.length()+ 1);
+                    }
+                    //if not exist reset.
+                    if(!new File(result).exists()){
+                        result = null;
+                    }
+                }
+            }
+
             if(data.getPathSegments() != null && data.getPathSegments().contains("raw:")){
                 result = DocumentsContract.getDocumentId(data).replace("raw:", "");
             }else {
