@@ -51,7 +51,10 @@ public final class FilePathCompat {
             //content://com.android.providers.downloads.documents/document/raw:/storage/emulated/0/Download/.com.google.Chrome.jfRtT6
             if (DocumentsContract.isDocumentUri(context, data)) {
                 String docId = DocumentsContract.getDocumentId(data);
-                if ("com.android.externalstorage.documents".equals(data.getAuthority())) {
+                if (FilePathResolver_kitkat.isExternalStorageDocument(data)
+                        || FilePathResolver_kitkat.isDownloadsDocument(data)
+                        || FilePathResolver_kitkat.isMediaDocument(data)
+                ) {
                     String dir = docId.split(":")[0];
                     String str = docId.split(":")[1];
                     if(str.startsWith(Environment.getExternalStorageDirectory().getAbsolutePath())){
