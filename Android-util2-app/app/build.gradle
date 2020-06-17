@@ -32,8 +32,8 @@ dependencies {
     //testCompile "org.robolectric:robolectric:3.3.2" //robolectric unit test lib.need as 3.0+
     //testCompile "org.assertj:assertj-core:1.7.0"
 
-    annotationProcessor "com.jakewharton:butterknife-compiler:8.2.0"
-    implementation "com.jakewharton:butterknife:${BUTTER_KNIFE_VERSION}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:10.0.0"
+    implementation "com.jakewharton:butterknife:10.0.0"
 
     //compile 'com.heaven7.android.demolib:android-demo-lib:1.0.1'
 

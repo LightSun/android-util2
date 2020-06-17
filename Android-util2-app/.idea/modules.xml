@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Android-util2-app.iml" filepath="$PROJECT_DIR$/Android-util2-app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/android-util2/android-util2.iml" filepath="$PROJECT_DIR$/android-util2/android-util2.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Android-util2-app.iml" filepath="$PROJECT_DIR$/Android-util2-app.iml" group="Android-util2-app" />
+      <module fileurl="file://$PROJECT_DIR$/android-util2/android-util2.iml" filepath="$PROJECT_DIR$/android-util2/android-util2.iml" group="Android-util2-app/android-util2" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Android-util2-app/app" />
     </modules>
   </component>
 </project>

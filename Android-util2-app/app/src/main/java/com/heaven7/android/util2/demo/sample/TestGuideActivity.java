@@ -2,7 +2,6 @@ package com.heaven7.android.util2.demo.sample;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -59,7 +58,7 @@ public class TestGuideActivity extends BaseActivity {
     }
 
     @Override
-    public void onInitialize(Context context, @Nullable Bundle savedInstanceState) {
+    public void onInitialize(Context context, Bundle savedInstanceState) {
         mRv.setLayoutManager(new LinearLayoutManager(context));
         mRv.setNestedScrollingEnabled(false);
 
