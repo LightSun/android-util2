@@ -3,6 +3,7 @@ package com.heaven7.android.util2;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * a compat network util.
  * Created by heaven7 on 2016/6/20.
  */
-public class NetworkCompatUtil {
+public final class NetworkCompatUtil {
 
     /**
      * indicate is wifi connected or not.
@@ -23,7 +24,18 @@ public class NetworkCompatUtil {
      * @return true if wifi is connected.
      */
     public static boolean isWifiConnected(Context context) {
-        return getConnectedNetworkByType(context,ConnectivityManager.TYPE_WIFI) != null;
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
+                return capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI));
+            } else {
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                return activeNetwork != null && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI
+                        && activeNetwork.isConnected();
+            }
+        }
+        return false;
     }
 
     /**
@@ -32,8 +44,18 @@ public class NetworkCompatUtil {
      * @return true if has connected network, false otherwise.
      */
     public static boolean hasConnectedNetwork(Context context) {
-        List<NetworkInfo> list = getConnectedNetworks(context);
-        return list != null && list.size() > 0;
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
+                return capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                        || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR));
+            } else {
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                return activeNetwork != null && activeNetwork.isConnected();
+            }
+        }
+        return false;
     }
 
     /**
@@ -86,5 +108,4 @@ public class NetworkCompatUtil {
         }
         return list;
     }
-
 }
