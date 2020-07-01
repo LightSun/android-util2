@@ -77,7 +77,7 @@ public final class NetworkCompatUtil {
         }
         return null;
     }
-
+    //from api 23. connect and breaked this method also return not empty.
     private static List<NetworkInfo> getConnectedNetworks(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm == null) {
