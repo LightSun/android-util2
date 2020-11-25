@@ -46,6 +46,7 @@ public final class FilePathCompat {
         String result = null;
         try {
             //path = /document/home:董文秀的模板17:58.pdf
+            //content://com.android.providers.downloads.documents/document/230
             //content://com.android.providers.downloads.documents/document/home:董文秀的模板17:58.pdf
             //content://com.android.providers.downloads.documents/document/raw:/storage/emulated/0/Download/交易/app-release_219_jiagu_sign.apk
             //content://com.android.providers.downloads.documents/document/raw:/storage/emulated/0/Download/.com.google.Chrome.jfRtT6
@@ -176,9 +177,13 @@ public final class FilePathCompat {
                         return Environment.getExternalStorageDirectory() + "/" + split[1];
                     }
                 } else if (isDownloadsDocument(uri)) {// DownloadsProvider
-                    final String id = DocumentsContract.getDocumentId(uri);
+                    final String docId = DocumentsContract.getDocumentId(uri);
+                    if (docId.startsWith("raw:")) {
+                        final String path = docId.replaceFirst("raw:", "");
+                        return path;
+                    }
                     final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
-                            Long.valueOf(id));
+                            Long.valueOf(docId));
                     return getDataColumn(context, contentUri, null, null);
                 } else if (isMediaDocument(uri)) {// MediaProvider
                     final String docId = DocumentsContract.getDocumentId(uri);
