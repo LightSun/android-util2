@@ -24,6 +24,7 @@
         <activity android:name=".sample.TestGuideActivity"/>
         <activity android:name=".sample.TestGetImageInN"/>
         <activity android:name=".sample.Button3Activity"/>
+        <activity android:name=".sample.TestClickScaleImage"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

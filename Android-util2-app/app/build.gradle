@@ -5,7 +5,7 @@ android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
 
-    useLibrary 'org.apache.http.legacy'
+   // useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.heaven7.android.util2.demo"
@@ -23,6 +23,10 @@ android {
     }
     lintOptions{
         abortOnError false
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -47,4 +51,5 @@ dependencies {
     implementation 'com.github.LightSun:android-component:1.1.5-beta-x'
 
     implementation project(':android-util2')
+    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
 }

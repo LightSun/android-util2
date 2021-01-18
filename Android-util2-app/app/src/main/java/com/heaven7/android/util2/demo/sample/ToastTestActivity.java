@@ -2,9 +2,10 @@ package com.heaven7.android.util2.demo.sample;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import com.heaven7.android.component.toast.AppToastComponent;
 import com.heaven7.android.util2.demo.BaseActivity;

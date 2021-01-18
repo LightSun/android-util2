@@ -1,6 +1,7 @@
 package com.heaven7.android.util2.demo;
 
 import com.heaven7.android.util2.demo.sample.Button3Activity;
+import com.heaven7.android.util2.demo.sample.TestClickScaleImage;
 import com.heaven7.android.util2.demo.sample.TestGetImageInN;
 import com.heaven7.android.util2.demo.sample.TestGuideActivity;
 import com.heaven7.android.util2.demo.sample.ToastTestActivity;
@@ -19,6 +20,6 @@ public class MainActivity extends AbsMainActivity {
         list.add(new ActivityInfo(TestGuideActivity.class, "TestGuideActivity"));
         list.add(new ActivityInfo(TestGetImageInN.class, "TestGetImageInN"));
         list.add(new ActivityInfo(Button3Activity.class, "Button3Activity"));
-
+        list.add(new ActivityInfo(TestClickScaleImage.class, "TestClickScaleImage"));
     }
 }
